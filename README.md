@@ -9,3 +9,13 @@ query:
 1. 选定月份的总支出
 2. 选定月份的总收入
 
+
+
+database design
+
+tab_1:
+
+| _id  | year | month | day  | type | value | description | remain |
+| ---- | ---- | ----- | ---- | ---- | ----- | ----------- | ------ |
+|      |      |       |      |      |       |             |        |
+
