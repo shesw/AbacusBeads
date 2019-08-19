@@ -1,4 +1,4 @@
-package com.sheswland.abacusbeads;
+package com.sheswland.abacusbeads.operate;
 
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +11,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
+import com.sheswland.abacusbeads.BaseActivity;
+import com.sheswland.abacusbeads.R;
 import com.sheswland.abacusbeads.utils.DebugLog;
+import com.sheswland.abacusbeads.utils.JumperHelper;
 import com.sheswland.abacusbeads.utils.TipUtils;
 
 public class OperationActivity extends BaseActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
@@ -66,6 +69,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
             DebugLog.d(TAG, "bt_commit");
         } else if (id == R.id.bt_query) {
             DebugLog.d(TAG, "bt_query");
+            JumperHelper.jump2Query(mActivity);
         } else if (id == R.id.bt_reset) {
             DebugLog.d(TAG, "bt_reset");
             TipUtils.showMidToast(mActivity, "还没想好这个按钮用来干嘛");

@@ -12,8 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BaseActivity"></activity>
-        <activity android:name=".OperationActivity">
+        <activity android:name=".query.QueryActivity"></activity>
+        <activity android:name=".BaseActivity" />
+        <activity android:name=".operate.OperationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
