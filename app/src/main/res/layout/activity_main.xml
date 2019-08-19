@@ -6,13 +6,119 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/logo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:placeholderImage="@drawable/trifeather"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@id/inputs" />
+
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/inputs"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logo"
+        app:layout_constraintBottom_toTopOf="@id/bt_query" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:gravity="center"
+            app:layout_constraintEnd_toStartOf="@id/input_date"
+            app:layout_constraintBottom_toBottomOf="@id/input_date"
+            android:layout_marginRight="10dp"
+            android:text="日期:"
+            android:textSize="22sp"/>
+
+        <EditText
+            android:id="@+id/input_date"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:hint="日期格式：xxxx-xx-xx"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/input_content" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:gravity="center"
+            app:layout_constraintEnd_toStartOf="@id/input_content"
+            app:layout_constraintBottom_toBottomOf="@id/input_content"
+            android:layout_marginRight="10dp"
+            android:text="项目:"
+            android:textSize="22sp"/>
+
+        <EditText
+            android:id="@+id/input_content"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/input_date"
+            app:layout_constraintBottom_toTopOf="@id/input_spend"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:gravity="center"
+            app:layout_constraintEnd_toStartOf="@id/input_spend"
+            app:layout_constraintBottom_toBottomOf="@id/input_spend"
+            android:layout_marginRight="10dp"
+            android:text="金额:"
+            android:textSize="22sp"/>
+
+        <EditText
+            android:id="@+id/input_spend"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/input_content"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <Button
+        android:id="@+id/bt_commit"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="45dp"
+        android:layout_marginLeft="30dp"
+        android:text="commit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/bt_query"/>
+
+
+    <Button
+        android:id="@+id/bt_query"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="45dp"
+        android:text="query"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/bt_commit"
+        app:layout_constraintRight_toLeftOf="@id/bt_reset"/>
+
+    <Button
+        android:id="@+id/bt_reset"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="45dp"
+        android:layout_marginRight="30dp"
+        android:text="reset"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/bt_query"
+        app:layout_constraintRight_toRightOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>
