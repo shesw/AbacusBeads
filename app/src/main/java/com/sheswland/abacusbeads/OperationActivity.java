@@ -11,9 +11,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
+public class OperationActivity extends BaseActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
-    private final String TAG = "";
+    private final String TAG = "OperationActivity";
 
     private Activity mActivity;
 
