@@ -11,6 +11,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
+import com.sheswland.abacusbeads.utils.DebugLog;
+import com.sheswland.abacusbeads.utils.TipUtils;
+
 public class OperationActivity extends BaseActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
     private final String TAG = "OperationActivity";
@@ -60,11 +63,12 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.bt_commit) {
-
+            DebugLog.d(TAG, "bt_commit");
         } else if (id == R.id.bt_query) {
-
+            DebugLog.d(TAG, "bt_query");
         } else if (id == R.id.bt_reset) {
-
+            DebugLog.d(TAG, "bt_reset");
+            TipUtils.showMidToast(mActivity, "还没想好这个按钮用来干嘛");
         }
 
     }
@@ -73,8 +77,10 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId) {
             case R.id.rb_spend:
+                DebugLog.d(TAG, "rb_spend");
                 break;
             case R.id.rb_income:
+                DebugLog.d(TAG, "rb_income");
                 break;
         }
     }
