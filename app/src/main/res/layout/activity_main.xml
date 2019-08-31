@@ -21,7 +21,7 @@
         android:id="@+id/inputs"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="60dp"
+        android:layout_marginLeft="40dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/logo"
@@ -35,7 +35,7 @@
             app:layout_constraintBottom_toBottomOf="@id/input_date"
             android:layout_marginRight="10dp"
             android:text="日期:"
-            android:textSize="22sp"/>
+            android:textSize="18sp"/>
 
         <EditText
             android:id="@+id/input_date"
@@ -56,7 +56,7 @@
             app:layout_constraintBottom_toBottomOf="@id/input_content"
             android:layout_marginRight="10dp"
             android:text="项目:"
-            android:textSize="22sp"/>
+            android:textSize="18sp"/>
 
         <EditText
             android:id="@+id/input_content"
@@ -75,7 +75,7 @@
             app:layout_constraintBottom_toBottomOf="@id/input_spend"
             android:layout_marginRight="10dp"
             android:text="金额:"
-            android:textSize="22sp"/>
+            android:textSize="18sp"/>
 
         <EditText
             android:id="@+id/input_spend"
