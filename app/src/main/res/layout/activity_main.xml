@@ -95,7 +95,7 @@
             android:id="@+id/input_spend"
             android:layout_width="215dp"
             android:layout_height="60dp"
-            android:inputType="number"
+            android:inputType="number|numberDecimal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/input_content"
