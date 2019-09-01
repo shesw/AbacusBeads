@@ -31,27 +31,40 @@
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:gravity="center"
+            android:paddingTop="6dp"
             app:layout_constraintEnd_toStartOf="@id/input_date"
             app:layout_constraintBottom_toBottomOf="@id/input_date"
             android:layout_marginRight="10dp"
             android:text="日期:"
             android:textSize="18sp"/>
 
-        <EditText
+        <TextView
             android:id="@+id/input_date"
-            android:layout_width="200dp"
+            android:layout_width="215dp"
             android:layout_height="60dp"
-            android:hint="日期格式：xxxx-xx-xx"
+            android:gravity="center_vertical"
+            android:textSize="16sp"
+            android:paddingTop="6dp"
+            android:text="2019年9月1日9点18分44秒"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/input_content" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="#999999"
+            app:layout_constraintTop_toBottomOf="@id/input_date"
+            app:layout_constraintLeft_toLeftOf="@id/input_date"
+            app:layout_constraintRight_toRightOf="@id/input_date"/>
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:gravity="center"
+            android:paddingTop="6dp"
             app:layout_constraintEnd_toStartOf="@id/input_content"
             app:layout_constraintBottom_toBottomOf="@id/input_content"
             android:layout_marginRight="10dp"
@@ -60,7 +73,7 @@
 
         <EditText
             android:id="@+id/input_content"
-            android:layout_width="200dp"
+            android:layout_width="215dp"
             android:layout_height="60dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -71,6 +84,7 @@
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:gravity="center"
+            android:paddingTop="6dp"
             app:layout_constraintEnd_toStartOf="@id/input_spend"
             app:layout_constraintBottom_toBottomOf="@id/input_spend"
             android:layout_marginRight="10dp"
@@ -79,8 +93,9 @@
 
         <EditText
             android:id="@+id/input_spend"
-            android:layout_width="200dp"
+            android:layout_width="215dp"
             android:layout_height="60dp"
+            android:inputType="number"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/input_content"
