@@ -14,94 +14,117 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/inputs" />
+        app:layout_constraintBottom_toTopOf="@id/inputs_cardview" />
 
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/inputs"
+    <android.support.v7.widget.CardView
+        android:id="@+id/inputs_cardview"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
+        android:layout_height="200dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:cardBackgroundColor="#33000000"
+        app:cardCornerRadius="14dp"
+        app:cardElevation="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/logo"
-        app:layout_constraintBottom_toTopOf="@id/bt_query" >
+        app:layout_constraintBottom_toTopOf="@id/bt_query"
+        app:layout_constraintVertical_bias="0.3">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:gravity="center"
-            android:paddingTop="6dp"
-            app:layout_constraintEnd_toStartOf="@id/input_date"
-            app:layout_constraintBottom_toBottomOf="@id/input_date"
-            android:layout_marginRight="10dp"
-            android:text="日期:"
-            android:textSize="18sp"/>
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/inputs"
+            android:paddingTop="10dp"
+            android:paddingBottom="14dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/input_date"
-            android:layout_width="215dp"
-            android:layout_height="60dp"
-            android:gravity="center_vertical"
-            android:textSize="16sp"
-            android:paddingTop="6dp"
-            android:text="2019年9月1日9点18分44秒"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/input_content" />
+            <TextView
+                android:id="@+id/date_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="6dp"
+                android:layout_marginRight="10dp"
+                android:text="日期:"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/input_date"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/content_title"/>
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:background="#999999"
-            app:layout_constraintTop_toBottomOf="@id/input_date"
-            app:layout_constraintLeft_toLeftOf="@id/input_date"
-            app:layout_constraintRight_toRightOf="@id/input_date"/>
+            <TextView
+                android:id="@+id/input_date"
+                android:layout_width="215dp"
+                android:layout_height="0dp"
+                android:gravity="center_vertical"
+                android:textSize="16sp"
+                android:paddingTop="6dp"
+                android:text="2019年9月1日9点18分44秒"
+                app:layout_constraintLeft_toRightOf="@id/date_title"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/date_title"
+                app:layout_constraintBottom_toBottomOf="@id/date_title" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:background="#444444"
+                app:layout_constraintTop_toBottomOf="@id/input_date"
+                app:layout_constraintLeft_toLeftOf="@id/input_date"
+                app:layout_constraintRight_toRightOf="@id/input_date"/>
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:gravity="center"
-            android:paddingTop="6dp"
-            app:layout_constraintEnd_toStartOf="@id/input_content"
-            app:layout_constraintBottom_toBottomOf="@id/input_content"
-            android:layout_marginRight="10dp"
-            android:text="项目:"
-            android:textSize="18sp"/>
+            <TextView
+                android:id="@+id/content_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="6dp"
+                android:layout_marginRight="10dp"
+                android:text="项目:"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/input_content"
+                app:layout_constraintTop_toBottomOf="@id/input_date"
+                app:layout_constraintBottom_toTopOf="@id/spend_title"/>
 
-        <EditText
-            android:id="@+id/input_content"
-            android:layout_width="215dp"
-            android:layout_height="60dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/input_date"
-            app:layout_constraintBottom_toTopOf="@id/input_spend"/>
+            <EditText
+                android:id="@+id/input_content"
+                android:layout_width="215dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toRightOf="@id/content_title"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/content_title"
+                app:layout_constraintTop_toTopOf="@id/content_title"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:gravity="center"
-            android:paddingTop="6dp"
-            app:layout_constraintEnd_toStartOf="@id/input_spend"
-            app:layout_constraintBottom_toBottomOf="@id/input_spend"
-            android:layout_marginRight="10dp"
-            android:text="金额:"
-            android:textSize="18sp"/>
+            <TextView
+                android:id="@+id/spend_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="6dp"
+                android:layout_marginRight="10dp"
+                android:text="金额:"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/input_spend"
+                app:layout_constraintTop_toBottomOf="@id/content_title"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <EditText
-            android:id="@+id/input_spend"
-            android:layout_width="215dp"
-            android:layout_height="60dp"
-            android:inputType="number|numberDecimal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/input_content"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            <EditText
+                android:id="@+id/input_spend"
+                android:layout_width="215dp"
+                android:layout_height="wrap_content"
+                android:inputType="number|numberDecimal"
+                app:layout_constraintLeft_toRightOf="@id/spend_title"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/spend_title"
+                app:layout_constraintTop_toTopOf="@id/spend_title"/>
 
-    </android.support.constraint.ConstraintLayout>
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.CardView>
+
 
     <RadioGroup
         android:id="@+id/radio_group"
@@ -109,7 +132,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/inputs"
+        app:layout_constraintTop_toBottomOf="@id/inputs_cardview"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
 
