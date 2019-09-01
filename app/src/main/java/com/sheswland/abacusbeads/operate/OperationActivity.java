@@ -36,9 +36,9 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
     private EditText inputContent;
     private EditText inputSpend;
     private RadioGroup radioGroup;
-    private Button btCommit;
-    private Button btQuery;
-    private Button btReset;
+    private TextView btCommit;
+    private TextView btQuery;
+    private TextView btReset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
