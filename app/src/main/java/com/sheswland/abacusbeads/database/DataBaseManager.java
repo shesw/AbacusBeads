@@ -92,7 +92,10 @@ public class DataBaseManager {
     public static void saveTable(Table table) {
         if (table instanceof OperateDataTable) {
             OperateDataTable lastRecord = LitePal.findLast(OperateDataTable.class);
-            float remain = lastRecord.getRemain();
+            float remain  = 0;
+            if (lastRecord != null) {
+                remain = lastRecord.getRemain();
+            }
             if (((OperateDataTable)table).isIncome()) {
                 remain += ((OperateDataTable)table).getSpend();
             } else {

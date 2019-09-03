@@ -90,6 +90,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
                 operateDataTable.setContent(content);
                 operateDataTable.setSpend(Float.parseFloat(spend));
                 TipUtils.showMidToast(mActivity, "commit success");
+                DataBaseManager.saveTable(operateDataTable);
             }
         } else if (id == R.id.bt_query) {
             DebugLog.d(TAG, "bt_query");
