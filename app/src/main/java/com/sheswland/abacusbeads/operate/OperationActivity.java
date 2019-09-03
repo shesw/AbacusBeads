@@ -13,11 +13,14 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.sheswland.abacusbeads.BaseActivity;
 import com.sheswland.abacusbeads.R;
+import com.sheswland.abacusbeads.database.DataBaseManager;
+import com.sheswland.abacusbeads.database.tables.OperateDataTable;
 import com.sheswland.abacusbeads.utils.DebugLog;
 import com.sheswland.abacusbeads.utils.JumperHelper;
 import com.sheswland.abacusbeads.utils.TipUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class OperationActivity extends BaseActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
@@ -33,6 +36,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
     private TextView btCommit;
     private TextView btQuery;
     private TextView btReset;
+    private OperateDataTable operateDataTable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +61,9 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
 
     private void initViews() {
         inputDate.setOnClickListener(this);
-        inputDate.setText(getTime(new Date()));
+        Date date = new Date();
+        inputDate.setText(getTime(date));
+        operateDataTable = (OperateDataTable) DataBaseManager.produceTable(DataBaseManager.TableType.OPERATE_TAB, date, null);
         radioGroup.setOnCheckedChangeListener(this);
         btCommit.setOnClickListener(this);
         btQuery.setOnClickListener(this);
@@ -72,7 +78,10 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
             DebugLog.d(TAG, "input date");
             showDatePicker();
         } else if (id == R.id.bt_commit) {
-            DebugLog.d(TAG, "bt_commit");
+            DebugLog.d(TAG, "bt_commit " + inputContent.getText().toString() + " " + inputSpend.getText().toString() + " ");
+            operateDataTable.setContent(inputContent.getText().toString());
+            operateDataTable.setSpend(Float.parseFloat(inputSpend.getText().toString()));
+
         } else if (id == R.id.bt_query) {
             DebugLog.d(TAG, "bt_query");
             JumperHelper.jump2Query(mActivity);
@@ -88,9 +97,12 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
         switch (checkedId) {
             case R.id.rb_spend:
                 DebugLog.d(TAG, "rb_spend");
+                operateDataTable.setIncome(false);
+
                 break;
             case R.id.rb_income:
                 DebugLog.d(TAG, "rb_income");
+                operateDataTable.setIncome(true);
                 break;
         }
     }
@@ -104,6 +116,25 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
                 String dateString = getTime(date);
                 DebugLog.d(TAG, "date" + dateString);
                 inputDate.setText(dateString);
+                operateDataTable = (OperateDataTable) DataBaseManager.produceTable(DataBaseManager.TableType.OPERATE_TAB, date, operateDataTable);
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                operateDataTable.setYear(calendar.get(Calendar.YEAR));
+                operateDataTable.setMonth(calendar.get(Calendar.MONTH) + 1);
+                operateDataTable.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+                operateDataTable.setHour(calendar.get(Calendar.HOUR));
+                operateDataTable.setMinute(calendar.get(Calendar.MINUTE));
+                operateDataTable.setSecond(calendar.get(Calendar.SECOND));
+                DebugLog.d(TAG, "date");
+                DebugLog.d(TAG, operateDataTable.getYear() + "");
+                DebugLog.d(TAG, operateDataTable.getMonth() + "");
+                DebugLog.d(TAG, operateDataTable.getDay() + "");
+                DebugLog.d(TAG, operateDataTable.getHour() + "");
+                DebugLog.d(TAG, operateDataTable.getMinute() + "");
+                DebugLog.d(TAG, operateDataTable.getSecond() + "");
+
+
             }
         }) .setType(new boolean[]{true, true, true, true, true, true})// 默认全部显示
                 .setCancelText("Cancel")//取消按钮文字

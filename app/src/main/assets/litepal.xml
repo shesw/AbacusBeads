@@ -32,7 +32,7 @@
     	</list>
     -->
     <list>
-        <mapping class="com.sheswland.abacusbeads.database.Tab_total" />
+        <mapping class="com.sheswland.abacusbeads.database.tables.OperateDataTable" />
     </list>
 
     <!--
