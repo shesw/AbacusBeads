@@ -147,7 +147,7 @@
         android:id="@+id/radio_group_cardview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         app:cardBackgroundColor="@color/card_background_66"
         app:cardCornerRadius="6dp"
         app:cardElevation="0dp"
