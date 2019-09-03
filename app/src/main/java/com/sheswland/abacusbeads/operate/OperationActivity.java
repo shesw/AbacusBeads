@@ -17,6 +17,7 @@ import com.sheswland.abacusbeads.database.DataBaseManager;
 import com.sheswland.abacusbeads.database.tables.OperateDataTable;
 import com.sheswland.abacusbeads.utils.DebugLog;
 import com.sheswland.abacusbeads.utils.JumperHelper;
+import com.sheswland.abacusbeads.utils.TextUtil;
 import com.sheswland.abacusbeads.utils.TipUtils;
 
 import java.text.SimpleDateFormat;
@@ -78,10 +79,18 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
             DebugLog.d(TAG, "input date");
             showDatePicker();
         } else if (id == R.id.bt_commit) {
-            DebugLog.d(TAG, "bt_commit " + inputContent.getText().toString() + " " + inputSpend.getText().toString() + " ");
-            operateDataTable.setContent(inputContent.getText().toString());
-            operateDataTable.setSpend(Float.parseFloat(inputSpend.getText().toString()));
-
+            String content = inputContent.getText().toString();
+            String spend = inputSpend.getText().toString();
+            DebugLog.d(TAG, "bt_commit " + content + " " + spend + " ");
+            if (TextUtil.isEmpty(content)) {
+                TipUtils.showMidToast(mActivity, "请输入内容");
+            } else if (TextUtil.isEmpty(spend)) {
+                TipUtils.showMidToast(mActivity, "请输入金额");
+            } else {
+                operateDataTable.setContent(content);
+                operateDataTable.setSpend(Float.parseFloat(spend));
+                TipUtils.showMidToast(mActivity, "commit success");
+            }
         } else if (id == R.id.bt_query) {
             DebugLog.d(TAG, "bt_query");
             JumperHelper.jump2Query(mActivity);
