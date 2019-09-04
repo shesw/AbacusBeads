@@ -8,6 +8,7 @@ import org.litepal.LitePal;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class DataBaseManager {
 
@@ -105,6 +106,21 @@ public class DataBaseManager {
 
             ((OperateDataTable)table).save();
         }
+    }
+
+    public static List query(TableType type, String... condition) {
+        StringBuilder queryCondition = new StringBuilder();
+        for (String c : condition) {
+         queryCondition.append(c).append(";");
+        }
+        queryCondition.delete(queryCondition.length() - 1, queryCondition.length());
+        if (type == TableType.OPERATE_TAB) {
+            List<OperateDataTable> list;
+            list = (List<OperateDataTable>) LitePal.findAll(OperateDataTable.class);
+            DebugLog.d(TAG, "query operate " + list.size());
+            return list;
+        }
+        return null;
     }
 
     /****************************** private methods ******************************/

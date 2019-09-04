@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingLeft="3dp"
+    android:paddingRight="3dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+
+    <TextView
+        android:id="@+id/date"
+        android:text="19930418"
+        android:textColor="#ffffff"
+        android:gravity="center"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content" />
+
+    <include layout="@layout/dividing_view" />
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:gravity="center_vertical"
+        android:text="吃了碗拉面吃了碗拉面吃了碗拉面吃了碗拉面吃了碗拉面吃了碗拉面吃了碗拉面吃了碗拉面"/>
+
+    <include layout="@layout/dividing_view" />
+
+    <TextView
+        android:id="@+id/type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:gravity="center"
+        android:text="支出"/>
+
+    <include layout="@layout/dividing_view" />
+
+    <TextView
+        android:id="@+id/spend"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:text="103242.78"/>
+
+    <include layout="@layout/dividing_view" />
+
+    <TextView
+        android:id="@+id/remain"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:text="321421.98"
+        />
+
+</LinearLayout>
