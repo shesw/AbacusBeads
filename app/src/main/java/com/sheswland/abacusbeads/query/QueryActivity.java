@@ -1,6 +1,5 @@
 package com.sheswland.abacusbeads.query;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.sheswland.abacusbeads.BaseActivity;
@@ -13,4 +12,8 @@ public class QueryActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_query);
     }
+
+
+
+
 }
