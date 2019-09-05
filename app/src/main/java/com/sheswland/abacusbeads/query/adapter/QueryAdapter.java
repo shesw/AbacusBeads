@@ -46,7 +46,7 @@ public class QueryAdapter extends RecyclerView.Adapter<QueryAdapter.MyViewHolder
         myViewHolder.content.setText(table.getContent());
         myViewHolder.type.setText(table.isIncome() ? "收入" : "支出");
         myViewHolder.spend.setText(String.valueOf(table.getSpend()));
-        myViewHolder.spend.setText(String.valueOf(table.getRemain()));
+        myViewHolder.remain.setText(String.valueOf(table.getRemain()));
         DebugLog.d(TAG, "bind view " + table.getYear());
     }
 

@@ -7,6 +7,7 @@ import com.sheswland.abacusbeads.utils.DebugLog;
 import org.litepal.LitePal;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -41,12 +42,26 @@ public class DataBaseManager {
         switch (type) {
             case OPERATE_TAB:
                 String tableId = getTabeId(type, date, FilterAccuracy.month);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
                 if (originTable instanceof OperateDataTable) {
                     ((OperateDataTable)originTable).setTableId(tableId);
+                    ((OperateDataTable)originTable).setYear(calendar.get(Calendar.YEAR));
+                    ((OperateDataTable)originTable).setMonth(calendar.get(Calendar.MONTH) + 1);
+                    ((OperateDataTable)originTable).setDay(calendar.get(Calendar.DAY_OF_MONTH));
+                    ((OperateDataTable)originTable).setHour(calendar.get(Calendar.HOUR));
+                    ((OperateDataTable)originTable).setMinute(calendar.get(Calendar.MINUTE));
+                    ((OperateDataTable)originTable).setSecond(calendar.get(Calendar.SECOND));
                     return originTable;
                 } else {
                     OperateDataTable operateData = new OperateDataTable();
                     operateData.setTableId(tableId);
+                    operateData.setYear(calendar.get(Calendar.YEAR));
+                    operateData.setMonth(calendar.get(Calendar.MONTH) + 1);
+                    operateData.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+                    operateData.setHour(calendar.get(Calendar.HOUR));
+                    operateData.setMinute(calendar.get(Calendar.MINUTE));
+                    operateData.setSecond(calendar.get(Calendar.SECOND));
                     return operateData;
                 }
             default:

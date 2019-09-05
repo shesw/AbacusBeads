@@ -64,7 +64,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
         inputDate.setOnClickListener(this);
         Date date = new Date();
         inputDate.setText(getTime(date));
-        operateDataTable = (OperateDataTable) DataBaseManager.produceTable(DataBaseManager.TableType.OPERATE_TAB, date, null);
+        operateDataTable = (OperateDataTable) DataBaseManager.produceTable(DataBaseManager.TableType.OPERATE_TAB, date, operateDataTable);
         radioGroup.setOnCheckedChangeListener(this);
         btCommit.setOnClickListener(this);
         btQuery.setOnClickListener(this);
@@ -79,19 +79,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
             DebugLog.d(TAG, "input date");
             showDatePicker();
         } else if (id == R.id.bt_commit) {
-            String content = inputContent.getText().toString();
-            String spend = inputSpend.getText().toString();
-            DebugLog.d(TAG, "bt_commit " + content + " " + spend + " ");
-            if (TextUtil.isEmpty(content)) {
-                TipUtils.showMidToast(mActivity, "请输入内容");
-            } else if (TextUtil.isEmpty(spend)) {
-                TipUtils.showMidToast(mActivity, "请输入金额");
-            } else {
-                operateDataTable.setContent(content);
-                operateDataTable.setSpend(Float.parseFloat(spend));
-                TipUtils.showMidToast(mActivity, "commit success");
-                DataBaseManager.saveTable(operateDataTable);
-            }
+           commit();
         } else if (id == R.id.bt_query) {
             DebugLog.d(TAG, "bt_query");
             JumperHelper.jump2Query(mActivity);
@@ -108,11 +96,12 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
             case R.id.rb_spend:
                 DebugLog.d(TAG, "rb_spend");
                 operateDataTable.setIncome(false);
-
+                DebugLog.d(TAG, "operation data " + operateDataTable.getYear() + " " + operateDataTable.getMonth() + " " + operateDataTable.getDay());
                 break;
             case R.id.rb_income:
                 DebugLog.d(TAG, "rb_income");
                 operateDataTable.setIncome(true);
+                DebugLog.d(TAG, "operation data " + operateDataTable.getYear() + " " + operateDataTable.getMonth() + " " + operateDataTable.getDay());
                 break;
         }
     }
@@ -127,15 +116,6 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
                 DebugLog.d(TAG, "date" + dateString);
                 inputDate.setText(dateString);
                 operateDataTable = (OperateDataTable) DataBaseManager.produceTable(DataBaseManager.TableType.OPERATE_TAB, date, operateDataTable);
-
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(date);
-                operateDataTable.setYear(calendar.get(Calendar.YEAR));
-                operateDataTable.setMonth(calendar.get(Calendar.MONTH) + 1);
-                operateDataTable.setDay(calendar.get(Calendar.DAY_OF_MONTH));
-                operateDataTable.setHour(calendar.get(Calendar.HOUR));
-                operateDataTable.setMinute(calendar.get(Calendar.MINUTE));
-                operateDataTable.setSecond(calendar.get(Calendar.SECOND));
                 DebugLog.d(TAG, "date");
                 DebugLog.d(TAG, operateDataTable.getYear() + "");
                 DebugLog.d(TAG, operateDataTable.getMonth() + "");
@@ -168,6 +148,22 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
                 .isDialog(true)//是否显示为对话框样式
                 .build();
         pvTime.show();
+    }
+
+    private void commit() {
+        String content = inputContent.getText().toString();
+        String spend = inputSpend.getText().toString();
+        DebugLog.d(TAG, "bt_commit " + content + " " + spend + " ");
+        if (TextUtil.isEmpty(content)) {
+            TipUtils.showMidToast(mActivity, "请输入内容");
+        } else if (TextUtil.isEmpty(spend)) {
+            TipUtils.showMidToast(mActivity, "请输入金额");
+        } else {
+            operateDataTable.setContent(content);
+            operateDataTable.setSpend(Float.parseFloat(spend));
+            DataBaseManager.saveTable(operateDataTable);
+            TipUtils.showMidToast(mActivity, "commit success");
+        }
     }
 
     private String getTime(Date date) {
