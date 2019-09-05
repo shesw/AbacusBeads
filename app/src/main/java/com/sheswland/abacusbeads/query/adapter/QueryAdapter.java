@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.sheswland.abacusbeads.R;
 import com.sheswland.abacusbeads.database.tables.OperateDataTable;
 import com.sheswland.abacusbeads.utils.DebugLog;
+import com.sheswland.abacusbeads.utils.TextUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ public class QueryAdapter extends RecyclerView.Adapter<QueryAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         OperateDataTable table = dataList.get(i);
-        myViewHolder.date.setText(table.getYear() + "" + table.getMonth() + "" + table.getDay());
+        myViewHolder.date.setText(TextUtil.formatDate2yyyyMMdd(table));
         myViewHolder.content.setText(table.getContent());
         myViewHolder.type.setText(table.isIncome() ? "收入" : "支出");
         myViewHolder.spend.setText(String.valueOf(table.getSpend()));
