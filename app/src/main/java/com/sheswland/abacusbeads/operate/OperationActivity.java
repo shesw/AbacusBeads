@@ -20,6 +20,8 @@ import com.sheswland.abacusbeads.utils.JumperHelper;
 import com.sheswland.abacusbeads.utils.TextUtil;
 import com.sheswland.abacusbeads.utils.TipUtils;
 
+import org.litepal.LitePal;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -48,6 +50,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
 
         findViews();
         initViews();
+        initDataTable();
     }
 
     private void findViews() {
@@ -62,13 +65,17 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
 
     private void initViews() {
         inputDate.setOnClickListener(this);
-        Date date = new Date();
-        inputDate.setText(getTime(date));
-        operateDataTable = (OperateDataTable) DataBaseManager.produceTable(DataBaseManager.TableType.OPERATE_TAB, date, operateDataTable);
         radioGroup.setOnCheckedChangeListener(this);
         btCommit.setOnClickListener(this);
         btQuery.setOnClickListener(this);
         btReset.setOnClickListener(this);
+    }
+
+    private void initDataTable() {
+        operateDataTable = new OperateDataTable();
+        Date date = new Date();
+        inputDate.setText(getTime(date));
+        operateDataTable = (OperateDataTable) DataBaseManager.produceTable(DataBaseManager.TableType.OPERATE_TAB, date, operateDataTable);
     }
 
     /************** implement interface methods ***************/
@@ -86,6 +93,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
         } else if (id == R.id.bt_reset) {
             DebugLog.d(TAG, "bt_reset");
             TipUtils.showMidToast(mActivity, "还没想好这个按钮用来干嘛");
+            LitePal.deleteAll(OperateDataTable.class);
         }
 
     }
@@ -162,6 +170,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
             operateDataTable.setContent(content);
             operateDataTable.setSpend(Float.parseFloat(spend));
             DataBaseManager.saveTable(operateDataTable);
+            initDataTable();
             TipUtils.showMidToast(mActivity, "commit success");
         }
     }
