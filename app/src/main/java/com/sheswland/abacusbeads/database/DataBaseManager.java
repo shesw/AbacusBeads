@@ -123,10 +123,10 @@ public class DataBaseManager {
         }
     }
 
-    public static List query(TableType type, String condition) {
+    public static List query(TableType type, String... condition) {
         if (type == TableType.OPERATE_TAB) {
             List<OperateDataTable> list;
-            list = LitePal.where("tableId = ?", condition).find(OperateDataTable.class);
+            list = LitePal.where(condition).find(OperateDataTable.class);
             DebugLog.d(TAG, "query operate " + list.size());
             return list;
         }

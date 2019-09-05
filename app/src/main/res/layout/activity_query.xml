@@ -71,7 +71,7 @@
                         android:layout_width="wrap_content"
                         android:alpha="0"/>
                     <TextView
-                        android:id="@+id/date"
+                        android:id="@+id/bt_date"
                         android:text="日期"
                         android:textColor="#ffffff"
                         android:textStyle="bold"
@@ -95,7 +95,7 @@
                 <include layout="@layout/dividing_view" />
 
                 <TextView
-                    android:id="@+id/type"
+                    android:id="@+id/bt_type"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:textColor="#ffffff"
@@ -150,7 +150,7 @@
         android:paddingBottom="12dp"
         android:layout_marginBottom="30dp"
         android:layout_marginRight="140dp"
-        android:text="commit"
+        android:text="print"
         android:textColor="#ffffff"
         android:gravity="center"
         android:background="@drawable/btn_background"
@@ -165,7 +165,7 @@
         android:paddingBottom="12dp"
         android:layout_marginBottom="30dp"
         android:layout_marginRight="20dp"
-        android:text="query"
+        android:text="open file system"
         android:textColor="#ffffff"
         android:gravity="center"
         android:background="@drawable/btn_background"
