@@ -55,12 +55,8 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void initQueryData() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH) + 1;
-
-        ArrayList<OperateDataTable> list = (ArrayList<OperateDataTable>) DataBaseManager.query(DataBaseManager.TableType.OPERATE_TAB, "year = " + year, "month = " + month);
+        Date date = new Date();
+        ArrayList<OperateDataTable> list = (ArrayList<OperateDataTable>) DataBaseManager.query(DataBaseManager.TableType.OPERATE_TAB, DataBaseManager.getTabeId(DataBaseManager.TableType.OPERATE_TAB, date, DataBaseManager.FilterAccuracy.month));
         for (OperateDataTable table : list) {
             DebugLog.d(TAG, "year " + table.getYear());
         }

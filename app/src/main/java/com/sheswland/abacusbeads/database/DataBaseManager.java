@@ -123,15 +123,10 @@ public class DataBaseManager {
         }
     }
 
-    public static List query(TableType type, String... condition) {
-        StringBuilder queryCondition = new StringBuilder();
-        for (String c : condition) {
-         queryCondition.append(c).append(";");
-        }
-        queryCondition.delete(queryCondition.length() - 1, queryCondition.length());
+    public static List query(TableType type, String condition) {
         if (type == TableType.OPERATE_TAB) {
             List<OperateDataTable> list;
-            list = (List<OperateDataTable>) LitePal.findAll(OperateDataTable.class);
+            list = LitePal.where("tableId = ?", condition).find(OperateDataTable.class);
             DebugLog.d(TAG, "query operate " + list.size());
             return list;
         }
