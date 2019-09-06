@@ -15,5 +15,12 @@ public class TextUtil {
         }
         return "20190905";
     }
-}
 
+    public static String formatDate2yyyyMM(Table table) {
+        if (table instanceof OperateDataTable) {
+            OperateDataTable table1 = (OperateDataTable) table;
+            return table1.getYear() + "" + (table1.getMonth() > 9 ? table1.getMonth() + "" : "0" + table1.getMonth());
+        }
+        return "201909";
+    }
+}

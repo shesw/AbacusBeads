@@ -14,6 +14,8 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.sheswland.abacusbeads.BaseActivity;
 import com.sheswland.abacusbeads.R;
 import com.sheswland.abacusbeads.database.DataBaseManager;
+import com.sheswland.abacusbeads.database.tables.AccountDayTable;
+import com.sheswland.abacusbeads.database.tables.AccountMonthAndYearTable;
 import com.sheswland.abacusbeads.database.tables.OperateDataTable;
 import com.sheswland.abacusbeads.utils.DebugLog;
 import com.sheswland.abacusbeads.utils.JumperHelper;
@@ -75,7 +77,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
         operateDataTable = new OperateDataTable();
         Date date = new Date();
         inputDate.setText(getTime(date));
-        operateDataTable = (OperateDataTable) DataBaseManager.produceTable(DataBaseManager.TableType.OPERATE_TAB, date, operateDataTable);
+        operateDataTable = (OperateDataTable) DataBaseManager.getInstance().produceTable(DataBaseManager.TableType.OPERATE_TAB, date, operateDataTable);
     }
 
     /************** implement interface methods ***************/
@@ -94,9 +96,11 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
             DebugLog.d(TAG, "bt_reset");
             TipUtils.showMidToast(mActivity, "还没想好这个按钮用来干嘛");
             LitePal.deleteAll(OperateDataTable.class);
+            LitePal.deleteAll(AccountDayTable.class);
+            LitePal.deleteAll(AccountMonthAndYearTable.class);
         }
-
     }
+
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -123,7 +127,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
                 String dateString = getTime(date);
                 DebugLog.d(TAG, "date" + dateString);
                 inputDate.setText(dateString);
-                operateDataTable = (OperateDataTable) DataBaseManager.produceTable(DataBaseManager.TableType.OPERATE_TAB, date, operateDataTable);
+                operateDataTable = (OperateDataTable) DataBaseManager.getInstance().produceTable(DataBaseManager.TableType.OPERATE_TAB, date, operateDataTable);
                 DebugLog.d(TAG, "date");
                 DebugLog.d(TAG, operateDataTable.getYear() + "");
                 DebugLog.d(TAG, operateDataTable.getMonth() + "");
@@ -169,7 +173,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
         } else {
             operateDataTable.setContent(content);
             operateDataTable.setSpend(Float.parseFloat(spend));
-            DataBaseManager.saveTable(operateDataTable);
+            DataBaseManager.getInstance().saveTable(operateDataTable);
             initDataTable();
             TipUtils.showMidToast(mActivity, "commit success");
         }

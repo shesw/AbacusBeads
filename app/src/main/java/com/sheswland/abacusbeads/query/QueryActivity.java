@@ -7,9 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.sheswland.abacusbeads.BaseActivity;
 import com.sheswland.abacusbeads.R;
 import com.sheswland.abacusbeads.database.DataBaseManager;
+import com.sheswland.abacusbeads.database.database_interface.Table;
 import com.sheswland.abacusbeads.database.tables.OperateDataTable;
 import com.sheswland.abacusbeads.query.adapter.QueryAdapter;
 import com.sheswland.abacusbeads.utils.DebugLog;
@@ -22,8 +24,14 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
     private final String TAG = "QueryActivity";
 
     private final String[] types = new String[] {"类型", "支出", "收入"};
+    public enum accuracy{
+        year,
+        month,
+        day
+    }
 
     private Activity mActivity;
+    private SimpleDraweeView logo;
     private RecyclerView queryList;
     private QueryAdapter queryAdapter;
     private TextView btPrint;
@@ -32,6 +40,9 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
     private TextView btType;
 
     private int currentType;
+    private int currentAccuracy;
+    private String currentTableId;
+    private DataBaseManager.TableType currentTableType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +55,7 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void findViews() {
+        logo = findViewById(R.id.logo);
         btPrint = findViewById(R.id.bt_print);
         btOpenFileSystem = findViewById(R.id.bt_open_file_system);
         queryList = findViewById(R.id.query_list);
@@ -52,6 +64,7 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void initViews() {
+        logo.setOnClickListener(this);
         btPrint.setOnClickListener(this);
         btOpenFileSystem.setOnClickListener(this);
         btDate.setOnClickListener(this);
@@ -63,9 +76,12 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void initQueryData() {
+        currentTableType = DataBaseManager.TableType.ACCOUNT_DAY;
         Date date = new Date();
-        String[] queryCondition = new String[] {"tableId = ?", DataBaseManager.getTabeId(DataBaseManager.TableType.OPERATE_TAB, date, DataBaseManager.FilterAccuracy.month)};
-        ArrayList<OperateDataTable> list = (ArrayList<OperateDataTable>) DataBaseManager.query(DataBaseManager.TableType.OPERATE_TAB, queryCondition[0], queryCondition[1]);
+        currentTableId = DataBaseManager.getInstance().getTabeId(currentTableType, date, DataBaseManager.FilterAccuracy.month);
+        DebugLog.d(TAG, "currentTableId " + currentTableId);
+        String[] queryCondition = new String[] {"table_id = ?", currentTableId};
+        ArrayList<Table> list = (ArrayList<Table>) DataBaseManager.getInstance().query(currentTableType, queryCondition[0], queryCondition[1]);
         queryAdapter.setData(list);
         queryAdapter.notifyDataSetChanged();
     }
@@ -76,23 +92,39 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
             currentType = 0;
         }
         btType.setText(types[currentType]);
-
         Date date = new Date();
         if (currentType == 0) {
-            String[] queryCondition = new String[]{"tableId = ?", DataBaseManager.getTabeId(DataBaseManager.TableType.OPERATE_TAB, date, DataBaseManager.FilterAccuracy.month)};
-            ArrayList<OperateDataTable> list = (ArrayList<OperateDataTable>) DataBaseManager.query(DataBaseManager.TableType.OPERATE_TAB, queryCondition[0], queryCondition[1]);
+            String[] queryCondition = new String[]{"table_id = ?", currentTableId};
+            ArrayList<Table> list = (ArrayList<Table>) DataBaseManager.getInstance().query(currentTableType, queryCondition[0], queryCondition[1]);
             queryAdapter.setData(list);
             queryAdapter.notifyDataSetChanged();
         } else if (currentType == 1) {
-            String[] queryCondition = new String[]{"tableId = ? and isIncome = ?", DataBaseManager.getTabeId(DataBaseManager.TableType.OPERATE_TAB, date, DataBaseManager.FilterAccuracy.month), "0"};
-            ArrayList<OperateDataTable> list = (ArrayList<OperateDataTable>) DataBaseManager.query(DataBaseManager.TableType.OPERATE_TAB, queryCondition[0], queryCondition[1], queryCondition[2]);
+            String[] queryCondition = new String[]{"table_id = ? and isIncome = ?",currentTableId, "0"};
+            ArrayList<Table> list = (ArrayList<Table>) DataBaseManager.getInstance().query(currentTableType, queryCondition[0], queryCondition[1], queryCondition[2]);
             queryAdapter.setData(list);
             queryAdapter.notifyDataSetChanged();
         } else if (currentType == 2) {
-            String[] queryCondition = new String[]{"tableId = ? and isIncome = ?", DataBaseManager.getTabeId(DataBaseManager.TableType.OPERATE_TAB, date, DataBaseManager.FilterAccuracy.month), "1"};
-            ArrayList<OperateDataTable> list = (ArrayList<OperateDataTable>) DataBaseManager.query(DataBaseManager.TableType.OPERATE_TAB, queryCondition[0], queryCondition[1], queryCondition[2]);
+            String[] queryCondition = new String[]{"table_id = ? and isIncome = ?", currentTableId, "1"};
+            ArrayList<Table> list = (ArrayList<Table>) DataBaseManager.getInstance().query(currentTableType, queryCondition[0], queryCondition[1], queryCondition[2]);
             queryAdapter.setData(list);
             queryAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void changeAccuracy() {
+        currentAccuracy++;
+        if (currentAccuracy >= accuracy.values().length) {
+            currentAccuracy = 0;
+        }
+
+        if (currentAccuracy == 0) {
+
+        } else if (currentAccuracy == 1) {
+
+
+
+        } else if (currentAccuracy == 2) {
+
         }
 
     }
@@ -100,7 +132,9 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.bt_print) {
+        if (id == R.id.logo) {
+            changeAccuracy();
+        } else if (id == R.id.bt_print) {
             DebugLog.d(TAG, "bt print");
         } else if (id == R.id.bt_open_file_system) {
             DebugLog.d(TAG, "bt open file system");

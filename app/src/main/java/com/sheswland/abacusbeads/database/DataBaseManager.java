@@ -1,8 +1,11 @@
 package com.sheswland.abacusbeads.database;
 
 import com.sheswland.abacusbeads.database.database_interface.Table;
+import com.sheswland.abacusbeads.database.tables.AccountDayTable;
+import com.sheswland.abacusbeads.database.tables.AccountMonthAndYearTable;
 import com.sheswland.abacusbeads.database.tables.OperateDataTable;
 import com.sheswland.abacusbeads.utils.DebugLog;
+import com.sheswland.abacusbeads.utils.TextUtil;
 
 import org.litepal.LitePal;
 
@@ -16,7 +19,9 @@ public class DataBaseManager {
     private final static String TAG = "DataBaseManager";
 
     public enum TableType {
-        OPERATE_TAB
+        OPERATE_TAB,
+        ACCOUNT_DAY,
+        ACCOUNT_MONTH_AND_YEAR
     }
 
     public enum FilterAccuracy {
@@ -38,32 +43,24 @@ public class DataBaseManager {
         return _Holder;
     }
 
-    public static Table produceTable(TableType type, Date date, Table originTable) {
+    public Table produceTable(TableType type, Date date, Table originTable) {
         switch (type) {
             case OPERATE_TAB:
                 String tableId = getTabeId(type, date, FilterAccuracy.month);
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(date);
-                if (originTable instanceof OperateDataTable) {
-                    ((OperateDataTable)originTable).setTableId(tableId);
-                    ((OperateDataTable)originTable).setYear(calendar.get(Calendar.YEAR));
-                    ((OperateDataTable)originTable).setMonth(calendar.get(Calendar.MONTH) + 1);
-                    ((OperateDataTable)originTable).setDay(calendar.get(Calendar.DAY_OF_MONTH));
-                    ((OperateDataTable)originTable).setHour(calendar.get(Calendar.HOUR));
-                    ((OperateDataTable)originTable).setMinute(calendar.get(Calendar.MINUTE));
-                    ((OperateDataTable)originTable).setSecond(calendar.get(Calendar.SECOND));
-                    return originTable;
-                } else {
-                    OperateDataTable operateData = new OperateDataTable();
-                    operateData.setTableId(tableId);
-                    operateData.setYear(calendar.get(Calendar.YEAR));
-                    operateData.setMonth(calendar.get(Calendar.MONTH) + 1);
-                    operateData.setDay(calendar.get(Calendar.DAY_OF_MONTH));
-                    operateData.setHour(calendar.get(Calendar.HOUR));
-                    operateData.setMinute(calendar.get(Calendar.MINUTE));
-                    operateData.setSecond(calendar.get(Calendar.SECOND));
-                    return operateData;
+                if (!(originTable instanceof OperateDataTable)) {
+                    originTable = new OperateDataTable();
                 }
+                ((OperateDataTable) originTable).setTable_id(tableId);
+                ((OperateDataTable) originTable).setYear(calendar.get(Calendar.YEAR));
+                ((OperateDataTable) originTable).setMonth(calendar.get(Calendar.MONTH) + 1);
+                ((OperateDataTable) originTable).setDay(calendar.get(Calendar.DAY_OF_MONTH));
+                ((OperateDataTable) originTable).setHour(calendar.get(Calendar.HOUR));
+                ((OperateDataTable) originTable).setMinute(calendar.get(Calendar.MINUTE));
+                ((OperateDataTable) originTable).setSecond(calendar.get(Calendar.SECOND));
+                ((OperateDataTable) originTable).setDate(date);
+                return originTable;
             default:
                 break;
 
@@ -71,7 +68,7 @@ public class DataBaseManager {
         return null;
     }
 
-    public static String getTabeId(TableType type, Date date, FilterAccuracy accuracy) {
+    public String getTabeId(TableType type, Date date, FilterAccuracy accuracy) {
         String pattern = "yyyyMM";
         switch (accuracy) {
             case second:
@@ -98,43 +95,103 @@ public class DataBaseManager {
         DebugLog.d(TAG, "dateString " + dateString);
         switch (type) {
             case OPERATE_TAB:
-                return "operate_tab_" +dateString;
+            case ACCOUNT_DAY:
+            case ACCOUNT_MONTH_AND_YEAR:
+                return "operate_tab_" + dateString;
             default:
                 break;
         }
         return "";
     }
 
-    public static void saveTable(Table table) {
+    public void saveTable(Table table) {
         if (table instanceof OperateDataTable) {
-            OperateDataTable lastRecord = LitePal.findLast(OperateDataTable.class);
-            float remain  = 0;
-            if (lastRecord != null) {
-                remain = lastRecord.getRemain();
-            }
-            if (((OperateDataTable)table).isIncome()) {
-                remain += ((OperateDataTable)table).getSpend();
-            } else {
-                remain -= ((OperateDataTable)table).getSpend();
-            }
-            ((OperateDataTable)table).setRemain(remain);
-
-            ((OperateDataTable)table).save();
+            OperateDataTable table1 = saveOperateTable(table);
+            saveAccountDayTable(table1);
+            saveAccountMonthTable(table1);
+            saveAccountYearTable(table1);
         }
     }
 
-    public static List query(TableType type, String... condition) {
+    public List query(TableType type, String... condition) {
         if (type == TableType.OPERATE_TAB) {
             List<OperateDataTable> list;
             list = LitePal.where(condition).find(OperateDataTable.class);
             DebugLog.d(TAG, "query operate " + list.size());
             return list;
+        } else if (type == TableType.ACCOUNT_DAY) {
+            List<AccountDayTable> list;
+            list = LitePal.where(condition).find(AccountDayTable.class);
+            DebugLog.d(TAG, "query operate " + list.size());
+            return list;
+        } else if (type == TableType.ACCOUNT_MONTH_AND_YEAR) {
+            List<AccountMonthAndYearTable> list;
+            list = LitePal.where(condition).find(AccountMonthAndYearTable.class);
+            DebugLog.d(TAG, "query operate " + list.size());
+            return list;
         }
+
         return null;
     }
 
     /****************************** private methods ******************************/
+    private OperateDataTable saveOperateTable(Table table) {
+        OperateDataTable lastRecord = LitePal.findLast(OperateDataTable.class);
+        float remain = 0;
+        if (lastRecord != null) {
+            remain = lastRecord.getRemain();
+        }
+        if (((OperateDataTable) table).isIncome()) {
+            remain += ((OperateDataTable) table).getSpend();
+        } else {
+            remain -= ((OperateDataTable) table).getSpend();
+        }
+        ((OperateDataTable) table).setRemain(remain);
+        ((OperateDataTable) table).save();
+        return ((OperateDataTable) table);
+    }
 
+    private void saveAccountDayTable(OperateDataTable table) {
+        String tableId = getTabeId(TableType.ACCOUNT_DAY, table.getDate(), FilterAccuracy.month);
+        AccountDayTable dayTable = new AccountDayTable();
+        dayTable.setTable_id(tableId);
+        dayTable.setContent(table.getContent());
+        dayTable.setDate(TextUtil.formatDate2yyyyMMdd(table));
+        dayTable.setSpend(table.getSpend());
+        dayTable.setIncome(table.isIncome());
+        dayTable.setRemain(table.getRemain());
+        DebugLog.d(TAG, "table_id " + tableId);
+        dayTable.save();
+    }
 
+    private void saveAccountMonthTable(OperateDataTable table) {
+        String tableId = getTabeId(TableType.ACCOUNT_MONTH_AND_YEAR, table.getDate(), FilterAccuracy.month);
+        String date = TextUtil.formatDate2yyyyMM(table);
+        saveAccountMonthAndYearTable(table, tableId, date);
+    }
 
+    private void saveAccountYearTable(OperateDataTable table) {
+        String tableId = getTabeId(TableType.ACCOUNT_MONTH_AND_YEAR, table.getDate(), FilterAccuracy.year);
+        String date = table.getYear() + "";
+        saveAccountMonthAndYearTable(table, tableId, date);
+    }
+
+    private void saveAccountMonthAndYearTable(OperateDataTable table, String tableId, String date) {
+        AccountMonthAndYearTable monthAndYearTable = null;
+        try {
+            monthAndYearTable = (AccountMonthAndYearTable) LitePal.where("table_id = ?", tableId).find(AccountMonthAndYearTable.class);
+        } catch (Exception e) {
+            monthAndYearTable = new AccountMonthAndYearTable();
+        }
+        monthAndYearTable.setTable_id(tableId);
+        monthAndYearTable.setDate(date);
+        if (table.isIncome()) {
+            monthAndYearTable.setIncome(monthAndYearTable.getIncome() + table.getSecond());
+            monthAndYearTable.setRemain(monthAndYearTable.getRemain() + table.getSecond());
+        } else {
+            monthAndYearTable.setSpend(monthAndYearTable.getSpend() + table.getSecond());
+            monthAndYearTable.setRemain(monthAndYearTable.getRemain() - table.getSecond());
+        }
+        monthAndYearTable.save();
+    }
 }

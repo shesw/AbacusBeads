@@ -4,8 +4,10 @@ import com.sheswland.abacusbeads.database.database_interface.Table;
 
 import org.litepal.crud.LitePalSupport;
 
+import java.util.Date;
+
 public class OperateDataTable extends LitePalSupport implements Table {
-    private String tableId;
+    private String table_id;
 
     private boolean isIncome;
     private int year;
@@ -17,13 +19,22 @@ public class OperateDataTable extends LitePalSupport implements Table {
     private String content;
     private float spend;
     private float remain;
+    private Date date;
 
-    public String getTableId() {
-        return tableId;
+    public Date getDate() {
+        return date;
     }
 
-    public void setTableId(String tableId) {
-        this.tableId = tableId;
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getTable_id() {
+        return table_id;
+    }
+
+    public void setTable_id(String table_id) {
+        this.table_id = table_id;
     }
 
     public float getRemain() {
