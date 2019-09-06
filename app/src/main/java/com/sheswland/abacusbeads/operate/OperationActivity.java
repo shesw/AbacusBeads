@@ -3,6 +3,7 @@ package com.sheswland.abacusbeads.operate;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -43,16 +44,20 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
     private TextView btReset;
     private OperateDataTable operateDataTable;
 
+    private Handler mHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_operate);
 
         mActivity = this;
+        mHandler = new Handler(getMainLooper());
 
         findViews();
         initViews();
         initDataTable();
+        initTimer();
     }
 
     private void findViews() {
@@ -78,6 +83,17 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
         Date date = new Date();
         inputDate.setText(getTime(date));
         operateDataTable = (OperateDataTable) DataBaseManager.getInstance().produceTable(DataBaseManager.TableType.OPERATE_TAB, date, operateDataTable);
+    }
+
+    private void initTimer() {
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Date date1 = new Date();
+                inputDate.setText(getTime(date1));
+                initTimer();
+            }
+        }, 700);
     }
 
     /************** implement interface methods ***************/
