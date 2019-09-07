@@ -56,7 +56,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
 
         findViews();
         initViews();
-        initDataTable();
+        initDataTable(null);
         initTimer();
     }
 
@@ -78,9 +78,11 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
         btReset.setOnClickListener(this);
     }
 
-    private void initDataTable() {
+    private void initDataTable(Date date) {
+        if (date == null) {
+            date = new Date();
+        }
         operateDataTable = new OperateDataTable();
-        Date date = new Date();
         inputDate.setText(getTime(date));
         operateDataTable = (OperateDataTable) DataBaseManager.getInstance().produceTable(DataBaseManager.TableType.OPERATE_TAB, date, operateDataTable);
     }
@@ -190,7 +192,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
             operateDataTable.setContent(content);
             operateDataTable.setSpend(Float.parseFloat(spend));
             DataBaseManager.getInstance().saveTable(operateDataTable);
-            initDataTable();
+            initDataTable(operateDataTable.getDate());
             TipUtils.showMidToast(mActivity, "commit success");
         }
     }
