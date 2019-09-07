@@ -139,7 +139,7 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
             queryList.setAdapter(queryAdapter);
             queryAdapter.setAccuracy(accuracy.month);
             currentTableType = DataBaseManager.TableType.ACCOUNT_MONTH_AND_YEAR;
-            String[] condition = new String[] {"table_id = ?", DataBaseManager.getInstance().getTabeId(currentTableType, currentDate, DataBaseManager.FilterAccuracy.year)};
+            String[] condition = new String[] {"table_id = ?", DataBaseManager.getInstance().getTabeId(currentTableType, currentDate, DataBaseManager.FilterAccuracy.all_month)};
             ArrayList<Table> list = (ArrayList<Table>) DataBaseManager.getInstance().query(currentTableType, condition[0], condition[1]);
             queryAdapter.setData(list);
             queryAdapter.notifyDataSetChanged();
@@ -148,7 +148,7 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
             queryList.setAdapter(queryAdapter);
             queryAdapter.setAccuracy(accuracy.year);
             currentTableType = DataBaseManager.TableType.ACCOUNT_MONTH_AND_YEAR;
-            String[] condition = new String[] {"table_id = ?", DataBaseManager.getInstance().getTabeId(currentTableType, currentDate, DataBaseManager.FilterAccuracy.all)};
+            String[] condition = new String[] {"table_id = ?", DataBaseManager.getInstance().getTabeId(currentTableType, currentDate, DataBaseManager.FilterAccuracy.all_year)};
             ArrayList<Table> list = (ArrayList<Table>) DataBaseManager.getInstance().query(currentTableType, condition[0], condition[1]);
             queryAdapter.setData(list);
             queryAdapter.notifyDataSetChanged();

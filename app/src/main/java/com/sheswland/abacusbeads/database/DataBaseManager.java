@@ -26,7 +26,8 @@ public class DataBaseManager {
     }
 
     public enum FilterAccuracy {
-        all,
+        all_month,
+        all_year,
         year,
         month,
         day,
@@ -92,8 +93,10 @@ public class DataBaseManager {
             case year:
                 pattern = "yyyy";
                 break;
-            case all:
-                return prefix + "all";
+            case all_month:
+                return prefix + "all_month";
+            case all_year:
+                return prefix + "all_year";
         }
         SimpleDateFormat format = new SimpleDateFormat(pattern);
         String dateString = format.format(date);
@@ -200,21 +203,30 @@ public class DataBaseManager {
     }
 
     private void saveAccountMonthTable(OperateDataTable table) {
-        String tableId = getTabeId(TableType.ACCOUNT_MONTH_AND_YEAR, table.getDate(), FilterAccuracy.year);
+        String tableId = getTabeId(TableType.ACCOUNT_MONTH_AND_YEAR, table.getDate(), FilterAccuracy.all_month);
         DebugLog.d(TAG, "saveAccountMonthTable tableId " + tableId);
         String date = TextUtil.formatDate2yyyyMM(table);
-        saveAccountMonthAndYearTable(table, tableId, date);
+        saveAccountMonthAndYearTable(table, tableId, date, true);
     }
 
     private void saveAccountYearTable(OperateDataTable table) {
-        String tableId = getTabeId(TableType.ACCOUNT_MONTH_AND_YEAR, table.getDate(), FilterAccuracy.all);
+        String tableId = getTabeId(TableType.ACCOUNT_MONTH_AND_YEAR, table.getDate(), FilterAccuracy.all_year);
         DebugLog.d(TAG, "saveAccountYearTable tableId " + tableId);
         String date = table.getYear() + "";
-        saveAccountMonthAndYearTable(table, tableId, date);
+        saveAccountMonthAndYearTable(table, tableId, date, false);
     }
 
-    private void saveAccountMonthAndYearTable(OperateDataTable table, String tableId, String date) {
-        ArrayList<AccountMonthAndYearTable> result= (ArrayList<AccountMonthAndYearTable>) LitePal.where("table_id = ?", tableId).find(AccountMonthAndYearTable.class);
+    private void saveAccountMonthAndYearTable(OperateDataTable table, String tableId, String date, boolean isMonth) {
+
+        ArrayList<AccountMonthAndYearTable> result = null;
+
+        boolean isAnotherMonth;
+
+        if (isMonth) {
+            result= (ArrayList<AccountMonthAndYearTable>) LitePal.where( "table_id = ? and date = ?", tableId, table.getYear() + "" + table.getMonth() + "").find(AccountMonthAndYearTable.class);
+        } else {
+            result= (ArrayList<AccountMonthAndYearTable>) LitePal.where("table_id = ? and date = ?", tableId, table.getYear() +"").find(AccountMonthAndYearTable.class);
+        }
         AccountMonthAndYearTable table1 = null;
         if (result.size() > 0) {
             table1 = result.get(0);
@@ -235,7 +247,12 @@ public class DataBaseManager {
             monthAndYearTable.setSpend(table1.getSpend() + table.getSpend());
             monthAndYearTable.setRemain(table1.getRemain() - table.getSpend());
         }
-        delete(TableType.ACCOUNT_MONTH_AND_YEAR, "table_id = ?", tableId);
+
+        if (isMonth) {
+            delete(TableType.ACCOUNT_MONTH_AND_YEAR, "table_id = ? and date = ?", tableId, table.getYear() + "" + table.getMonth() + "");
+        } else {
+            delete(TableType.ACCOUNT_MONTH_AND_YEAR, "table_id = ? and date = ?", tableId, table.getYear() +"");
+        }
         monthAndYearTable.save();
     }
 }
