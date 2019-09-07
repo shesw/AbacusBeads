@@ -13,22 +13,24 @@
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-
         <TextView
+            android:id="@+id/bt_type"
             android:text="199304"
             android:textColor="#ffffff"
             android:gravity="center"
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
+            android:clickable="false"
             android:alpha="0"/>
 
         <TextView
-            android:id="@+id/date"
-            android:text="199304"
-            android:textColor="#ffffff"
-            android:gravity="center_vertical|right"
+            android:id="@+id/bt_date"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_width="match_parent" />
+            android:text="日期"
+            android:textColor="#ffffff"
+            android:gravity="center" />
+
     </FrameLayout>
 
     <include layout="@layout/dividing_view" />
@@ -39,8 +41,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textColor="#ffffff"
-        android:gravity="center_vertical|right"
-        android:text="103242.78"/>
+        android:gravity="center"
+        android:text="支出"/>
 
     <include layout="@layout/dividing_view" />
 
@@ -50,8 +52,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textColor="#ffffff"
-        android:gravity="center_vertical|right"
-        android:text="103242.78"/>
+        android:gravity="center"
+        android:text="收入"/>
 
     <include layout="@layout/dividing_view" />
 
@@ -61,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textColor="#ffffff"
-        android:gravity="center_vertical|right"
-        android:text="103242.78"/>
+        android:gravity="center"
+        android:text="余额"/>
 
 </LinearLayout>

@@ -21,6 +21,9 @@ import java.util.List;
 public class QueryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final String TAG = "QueryAdapter";
 
+    private int itemTypeTitle = 0;
+    private int itemTypeContent = 1;
+
     private Activity mAcivity;
     private List<Table> dataList;
 
@@ -43,20 +46,32 @@ public class QueryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int itemType) {
 
-        if (accuracy == QueryActivity.accuracy.day) {
-            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.query_list_item_layout_day, viewGroup, false);
-            return new DayViewHolder(view);
-        } else if (accuracy == QueryActivity.accuracy.month || accuracy == QueryActivity.accuracy.year) {
-            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.query_list_item_layout_month_and_year, viewGroup, false);
-            return new MonthAndYearViewHolder(view);
+        if (itemType == itemTypeTitle) {
+            if (accuracy == QueryActivity.accuracy.day) {
+                View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.query_title_day, viewGroup, false);
+                return new TitleViewHolder(view);
+            } else if (accuracy == QueryActivity.accuracy.month || accuracy == QueryActivity.accuracy.year) {
+                View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.query_title_month_and_year, viewGroup, false);
+                return new TitleViewHolder(view);
+            }
+        } else if (itemType == itemTypeContent) {
+            if (accuracy == QueryActivity.accuracy.day) {
+                View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.query_list_item_layout_day, viewGroup, false);
+                return new DayViewHolder(view);
+            } else if (accuracy == QueryActivity.accuracy.month || accuracy == QueryActivity.accuracy.year) {
+                View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.query_list_item_layout_month_and_year, viewGroup, false);
+                return new MonthAndYearViewHolder(view);
+            }
         }
         return null;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder myViewHolder, int i) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder myViewHolder, int position) {
+
+        int i = position - 1;
 
         if (myViewHolder instanceof DayViewHolder) {
             AccountDayTable table = (AccountDayTable) dataList.get(i);
@@ -77,7 +92,15 @@ public class QueryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return dataList.size();
+        return dataList.size() + 1;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return itemTypeTitle;
+        }
+        return itemTypeContent;
     }
 
     class DayViewHolder extends RecyclerView.ViewHolder {
@@ -107,6 +130,16 @@ public class QueryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             this.spend = itemView.findViewById(R.id.spend);
             this.income = itemView.findViewById(R.id.income);
             this.remain = itemView.findViewById(R.id.remain);
+        }
+    }
+
+    class TitleViewHolder extends RecyclerView.ViewHolder {
+        private TextView date;
+        private TextView type;
+        public TitleViewHolder(@NonNull View itemView) {
+            super(itemView);
+            date = itemView.findViewById(R.id.bt_date);
+            type = itemView.findViewById(R.id.bt_type);
         }
     }
 

@@ -40,8 +40,8 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
     private QueryAdapter queryAdapter;
     private TextView btPrint;
     private TextView btOpenFileSystem;
-    private TextView btDate;
-    private TextView btType;
+//    private TextView btDate;
+//    private TextView btType;
 
     private int currentType;
     private int currentAccuracy;
@@ -64,16 +64,16 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
         btPrint = findViewById(R.id.bt_print);
         btOpenFileSystem = findViewById(R.id.bt_open_file_system);
         queryList = findViewById(R.id.query_list);
-        btDate = findViewById(R.id.bt_date);
-        btType = findViewById(R.id.bt_type);
+//        btDate = findViewById(R.id.bt_date);
+//        btType = findViewById(R.id.bt_type);
     }
 
     private void initViews() {
         logo.setOnClickListener(this);
         btPrint.setOnClickListener(this);
         btOpenFileSystem.setOnClickListener(this);
-        btDate.setOnClickListener(this);
-        btType.setOnClickListener(this);
+//        btDate.setOnClickListener(this);
+//        btType.setOnClickListener(this);
         queryAdapter = new QueryAdapter(mActivity);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(mActivity);
         queryList.setLayoutManager(manager);
@@ -98,7 +98,7 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
         } else if (currentType < 0) {
             currentType = types.length - 1;
         }
-        btType.setText(types[currentType]);
+//        btType.setText(types[currentType]);
         if (currentType == 0) {
             String[] queryCondition = new String[]{"table_id = ?", currentTableId};
             ArrayList<Table> list = (ArrayList<Table>) DataBaseManager.getInstance().query(currentTableType, queryCondition[0], queryCondition[1]);
