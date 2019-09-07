@@ -149,6 +149,26 @@ public class DataBaseManager {
         return 1;
     }
 
+    public Table deepCopyTable(Table table) {
+        if (table instanceof OperateDataTable) {
+            OperateDataTable res = new OperateDataTable();
+            res.setTable_id(((OperateDataTable) table).getTable_id());
+            res.setDate(((OperateDataTable) table).getDate());
+            res.setRemain(((OperateDataTable) table).getRemain());
+            res.setSecond(((OperateDataTable) table).getSecond());
+            res.setContent(((OperateDataTable) table).getContent());
+            res.setYear(((OperateDataTable) table).getYear());
+            res.setMonth(((OperateDataTable) table).getMonth());
+            res.setDay(((OperateDataTable) table).getDay());
+            res.setHour(((OperateDataTable) table).getHour());
+            res.setMinute(((OperateDataTable) table).getMinute());
+            res.setSecond(((OperateDataTable) table).getSecond());
+            res.setIncome(((OperateDataTable) table).isIncome());
+            return res;
+        }
+        return null;
+    }
+
     /****************************** private methods ******************************/
     private OperateDataTable saveOperateTable(Table table) {
         OperateDataTable lastRecord = LitePal.findLast(OperateDataTable.class);

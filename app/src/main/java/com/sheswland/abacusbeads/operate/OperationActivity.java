@@ -191,7 +191,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
             operateDataTable.setContent(content);
             operateDataTable.setSpend(Float.parseFloat(spend));
             DataBaseManager.getInstance().saveTable(operateDataTable);
-            initDataTable(operateDataTable.getDate());
+            operateDataTable = (OperateDataTable) DataBaseManager.getInstance().deepCopyTable(operateDataTable);
             TipUtils.showMidToast(mActivity, "commit success");
         }
     }
