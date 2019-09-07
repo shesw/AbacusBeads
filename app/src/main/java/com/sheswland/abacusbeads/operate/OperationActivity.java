@@ -24,10 +24,9 @@ import com.sheswland.abacusbeads.utils.TextUtil;
 import com.sheswland.abacusbeads.utils.TipUtils;
 
 import org.litepal.LitePal;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
+
+import static com.sheswland.abacusbeads.utils.TextUtil.getTime;
 
 public class OperationActivity extends BaseActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
@@ -197,10 +196,4 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
-    private String getTime(Date date) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒");
-        String timeString = format.format(date);
-        DebugLog.d(TAG, "getTime " + timeString);
-        return timeString;
-    }
 }
