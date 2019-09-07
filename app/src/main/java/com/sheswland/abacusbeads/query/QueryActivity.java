@@ -159,7 +159,7 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.logo) {
-            changeAccuracy();
+//            changeAccuracy();
         } else if (id == R.id.bt_print) {
             DebugLog.d(TAG, "bt print");
         } else if (id == R.id.bt_open_file_system) {
