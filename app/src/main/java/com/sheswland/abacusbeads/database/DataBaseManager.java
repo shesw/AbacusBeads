@@ -19,6 +19,8 @@ public class DataBaseManager {
 
     private final static String TAG = "DataBaseManager";
 
+    public final static String OPERATE_TABLE_PREFIX = "operate_tab_";
+
     public enum TableType {
         OPERATE_TAB,
         ACCOUNT_DAY,
@@ -49,7 +51,7 @@ public class DataBaseManager {
     public Table produceTable(TableType type, Date date, Table originTable) {
         switch (type) {
             case OPERATE_TAB:
-                String tableId = getTabeId(type, date, FilterAccuracy.month);
+                String tableId = getTableId(type, date, FilterAccuracy.month);
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(date);
                 if (!(originTable instanceof OperateDataTable)) {
@@ -71,9 +73,21 @@ public class DataBaseManager {
         return null;
     }
 
-    public String getTabeId(TableType type, Date date, FilterAccuracy accuracy) {
+    public String getTableId(TableType type, String date) {
+        switch (type) {
+            case OPERATE_TAB:
+            case ACCOUNT_DAY:
+            case ACCOUNT_MONTH_AND_YEAR:
+                return OPERATE_TABLE_PREFIX + date;
+            default:
+                break;
+        }
+        return "";
+    }
+
+    public String getTableId(TableType type, Date date, FilterAccuracy accuracy) {
         String pattern = "yyyyMM";
-        String prefix = "operate_tab_";
+
         switch (accuracy) {
             case second:
                 pattern = "yyyyMMddHHmmss";
@@ -94,9 +108,9 @@ public class DataBaseManager {
                 pattern = "yyyy";
                 break;
             case all_month:
-                return prefix + "all_month";
+                return OPERATE_TABLE_PREFIX + "all_month";
             case all_year:
-                return prefix + "all_year";
+                return OPERATE_TABLE_PREFIX + "all_year";
         }
         SimpleDateFormat format = new SimpleDateFormat(pattern);
         String dateString = format.format(date);
@@ -105,7 +119,7 @@ public class DataBaseManager {
             case OPERATE_TAB:
             case ACCOUNT_DAY:
             case ACCOUNT_MONTH_AND_YEAR:
-                return prefix + dateString;
+                return OPERATE_TABLE_PREFIX + dateString;
             default:
                 break;
         }
@@ -190,7 +204,7 @@ public class DataBaseManager {
     }
 
     private void saveAccountDayTable(OperateDataTable table) {
-        String tableId = getTabeId(TableType.ACCOUNT_DAY, table.getDate(), FilterAccuracy.month);
+        String tableId = getTableId(TableType.ACCOUNT_DAY, table.getDate(), FilterAccuracy.month);
         AccountDayTable dayTable = new AccountDayTable();
         dayTable.setTable_id(tableId);
         dayTable.setContent(table.getContent());
@@ -203,14 +217,14 @@ public class DataBaseManager {
     }
 
     private void saveAccountMonthTable(OperateDataTable table) {
-        String tableId = getTabeId(TableType.ACCOUNT_MONTH_AND_YEAR, table.getDate(), FilterAccuracy.all_month);
+        String tableId = getTableId(TableType.ACCOUNT_MONTH_AND_YEAR, table.getDate(), FilterAccuracy.all_month);
         DebugLog.d(TAG, "saveAccountMonthTable tableId " + tableId);
         String date = TextUtil.formatDate2yyyyMM(table);
         saveAccountMonthAndYearTable(table, tableId, date, true);
     }
 
     private void saveAccountYearTable(OperateDataTable table) {
-        String tableId = getTabeId(TableType.ACCOUNT_MONTH_AND_YEAR, table.getDate(), FilterAccuracy.all_year);
+        String tableId = getTableId(TableType.ACCOUNT_MONTH_AND_YEAR, table.getDate(), FilterAccuracy.all_year);
         DebugLog.d(TAG, "saveAccountYearTable tableId " + tableId);
         String date = table.getYear() + "";
         saveAccountMonthAndYearTable(table, tableId, date, false);
