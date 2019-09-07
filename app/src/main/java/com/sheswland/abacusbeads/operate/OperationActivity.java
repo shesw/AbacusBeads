@@ -56,7 +56,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
         findViews();
         initViews();
         initDataTable(null);
-        initTimer();
+//        initTimer();
     }
 
     private void findViews() {
@@ -86,16 +86,16 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
         operateDataTable = (OperateDataTable) DataBaseManager.getInstance().produceTable(DataBaseManager.TableType.OPERATE_TAB, date, operateDataTable);
     }
 
-    private void initTimer() {
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Date date1 = new Date();
-                inputDate.setText(getTime(date1));
-                initTimer();
-            }
-        }, 700);
-    }
+//    private void initTimer() {
+//        mHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                Date date1 = new Date();
+//                inputDate.setText(getTime(date1));
+//                initTimer();
+//            }
+//        }, 700);
+//    }
 
     /************** implement interface methods ***************/
     @Override
