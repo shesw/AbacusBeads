@@ -23,7 +23,7 @@
     <TextView
         android:id="@+id/spend_title"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:textColor="#ffffff"
         android:gravity="center"
         android:text="支出"/>
@@ -33,7 +33,7 @@
     <TextView
         android:id="@+id/spend"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textColor="#ffffff"
         android:gravity="center_vertical|right"
@@ -44,7 +44,7 @@
     <TextView
         android:id="@+id/income_title"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:textColor="#ffffff"
         android:gravity="center"
         android:text="收入"/>
@@ -54,7 +54,7 @@
     <TextView
         android:id="@+id/income"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textColor="#ffffff"
         android:gravity="center_vertical|right"
@@ -65,7 +65,7 @@
     <TextView
         android:id="@+id/remain_title"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:textColor="#ffffff"
         android:gravity="center"
         android:text="余额"/>
@@ -75,12 +75,10 @@
     <TextView
         android:id="@+id/remain"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textColor="#ffffff"
         android:gravity="center_vertical|right"
         android:text="103242.78"/>
-
-    <include layout="@layout/dividing_view" />
 
 </LinearLayout>

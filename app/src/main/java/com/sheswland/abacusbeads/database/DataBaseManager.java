@@ -10,6 +10,7 @@ import com.sheswland.abacusbeads.utils.TextUtil;
 import org.litepal.LitePal;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -71,6 +72,7 @@ public class DataBaseManager {
 
     public String getTabeId(TableType type, Date date, FilterAccuracy accuracy) {
         String pattern = "yyyyMM";
+        String prefix = "operate_tab_";
         switch (accuracy) {
             case second:
                 pattern = "yyyyMMddHHmmss";
@@ -91,7 +93,7 @@ public class DataBaseManager {
                 pattern = "yyyy";
                 break;
             case all:
-                return "all";
+                return prefix + "all";
         }
         SimpleDateFormat format = new SimpleDateFormat(pattern);
         String dateString = format.format(date);
@@ -100,7 +102,7 @@ public class DataBaseManager {
             case OPERATE_TAB:
             case ACCOUNT_DAY:
             case ACCOUNT_MONTH_AND_YEAR:
-                return "operate_tab_" + dateString;
+                return prefix + dateString;
             default:
                 break;
         }
@@ -128,13 +130,23 @@ public class DataBaseManager {
             DebugLog.d(TAG, "query operate " + list.size());
             return list;
         } else if (type == TableType.ACCOUNT_MONTH_AND_YEAR) {
-            List<AccountMonthAndYearTable> list;
-            list = LitePal.where(condition).find(AccountMonthAndYearTable.class);
+            List<AccountMonthAndYearTable> list = LitePal.where(condition).find(AccountMonthAndYearTable.class);
             DebugLog.d(TAG, "query operate " + list.size());
             return list;
         }
 
         return null;
+    }
+
+    public int delete(TableType type, String... condition) {
+        if (type == TableType.OPERATE_TAB) {
+            return LitePal.deleteAll(OperateDataTable.class, condition);
+        } else if (type == TableType.ACCOUNT_DAY) {
+            return LitePal.deleteAll(AccountDayTable.class, condition);
+        } else if (type == TableType.ACCOUNT_MONTH_AND_YEAR) {
+            return LitePal.deleteAll(AccountMonthAndYearTable.class, condition);
+        }
+        return 1;
     }
 
     /****************************** private methods ******************************/
@@ -169,32 +181,41 @@ public class DataBaseManager {
 
     private void saveAccountMonthTable(OperateDataTable table) {
         String tableId = getTabeId(TableType.ACCOUNT_MONTH_AND_YEAR, table.getDate(), FilterAccuracy.year);
+        DebugLog.d(TAG, "saveAccountMonthTable tableId " + tableId);
         String date = TextUtil.formatDate2yyyyMM(table);
         saveAccountMonthAndYearTable(table, tableId, date);
     }
 
     private void saveAccountYearTable(OperateDataTable table) {
         String tableId = getTabeId(TableType.ACCOUNT_MONTH_AND_YEAR, table.getDate(), FilterAccuracy.all);
+        DebugLog.d(TAG, "saveAccountYearTable tableId " + tableId);
         String date = table.getYear() + "";
         saveAccountMonthAndYearTable(table, tableId, date);
     }
 
     private void saveAccountMonthAndYearTable(OperateDataTable table, String tableId, String date) {
-        AccountMonthAndYearTable monthAndYearTable = null;
-        try {
-            monthAndYearTable = (AccountMonthAndYearTable) LitePal.where("table_id = ?", tableId).find(AccountMonthAndYearTable.class);
-        } catch (Exception e) {
-            monthAndYearTable = new AccountMonthAndYearTable();
+        ArrayList<AccountMonthAndYearTable> result= (ArrayList<AccountMonthAndYearTable>) LitePal.where("table_id = ?", tableId).find(AccountMonthAndYearTable.class);
+        AccountMonthAndYearTable table1 = null;
+        if (result.size() > 0) {
+            table1 = result.get(0);
+        } else {
+            table1 = new AccountMonthAndYearTable();
         }
+
+        AccountMonthAndYearTable monthAndYearTable = new AccountMonthAndYearTable();
         monthAndYearTable.setTable_id(tableId);
+        DebugLog.d(TAG, "saveAccountMonthAndYearTable tableId " + tableId);
         monthAndYearTable.setDate(date);
         if (table.isIncome()) {
-            monthAndYearTable.setIncome(monthAndYearTable.getIncome() + table.getSecond());
-            monthAndYearTable.setRemain(monthAndYearTable.getRemain() + table.getSecond());
+            monthAndYearTable.setIncome(table1.getIncome() + table.getSpend());
+            monthAndYearTable.setSpend(table1.getSpend());
+            monthAndYearTable.setRemain(table1.getRemain() + table.getSpend());
         } else {
-            monthAndYearTable.setSpend(monthAndYearTable.getSpend() + table.getSecond());
-            monthAndYearTable.setRemain(monthAndYearTable.getRemain() - table.getSecond());
+            monthAndYearTable.setIncome(table1.getIncome());
+            monthAndYearTable.setSpend(table1.getSpend() + table.getSpend());
+            monthAndYearTable.setRemain(table1.getRemain() - table.getSpend());
         }
+        delete(TableType.ACCOUNT_MONTH_AND_YEAR, "table_id = ?", tableId);
         monthAndYearTable.save();
     }
 }
