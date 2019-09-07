@@ -25,6 +25,7 @@ public class DataBaseManager {
     }
 
     public enum FilterAccuracy {
+        all,
         year,
         month,
         day,
@@ -89,6 +90,8 @@ public class DataBaseManager {
             case year:
                 pattern = "yyyy";
                 break;
+            case all:
+                return "all";
         }
         SimpleDateFormat format = new SimpleDateFormat(pattern);
         String dateString = format.format(date);
@@ -165,13 +168,13 @@ public class DataBaseManager {
     }
 
     private void saveAccountMonthTable(OperateDataTable table) {
-        String tableId = getTabeId(TableType.ACCOUNT_MONTH_AND_YEAR, table.getDate(), FilterAccuracy.month);
+        String tableId = getTabeId(TableType.ACCOUNT_MONTH_AND_YEAR, table.getDate(), FilterAccuracy.year);
         String date = TextUtil.formatDate2yyyyMM(table);
         saveAccountMonthAndYearTable(table, tableId, date);
     }
 
     private void saveAccountYearTable(OperateDataTable table) {
-        String tableId = getTabeId(TableType.ACCOUNT_MONTH_AND_YEAR, table.getDate(), FilterAccuracy.year);
+        String tableId = getTabeId(TableType.ACCOUNT_MONTH_AND_YEAR, table.getDate(), FilterAccuracy.all);
         String date = table.getYear() + "";
         saveAccountMonthAndYearTable(table, tableId, date);
     }

@@ -12,12 +12,16 @@ import com.sheswland.abacusbeads.BaseActivity;
 import com.sheswland.abacusbeads.R;
 import com.sheswland.abacusbeads.database.DataBaseManager;
 import com.sheswland.abacusbeads.database.database_interface.Table;
+import com.sheswland.abacusbeads.database.tables.AccountMonthAndYearTable;
 import com.sheswland.abacusbeads.database.tables.OperateDataTable;
 import com.sheswland.abacusbeads.query.adapter.QueryAdapter;
 import com.sheswland.abacusbeads.utils.DebugLog;
 
+import org.litepal.LitePal;
+
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class QueryActivity extends BaseActivity implements View.OnClickListener {
 
@@ -43,6 +47,7 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
     private int currentAccuracy;
     private String currentTableId;
     private DataBaseManager.TableType currentTableType;
+    private Date currentDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +82,8 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
 
     private void initQueryData() {
         currentTableType = DataBaseManager.TableType.ACCOUNT_DAY;
-        Date date = new Date();
-        currentTableId = DataBaseManager.getInstance().getTabeId(currentTableType, date, DataBaseManager.FilterAccuracy.month);
+        currentDate = new Date();
+        currentTableId = DataBaseManager.getInstance().getTabeId(currentTableType, currentDate, DataBaseManager.FilterAccuracy.month);
         DebugLog.d(TAG, "currentTableId " + currentTableId);
         String[] queryCondition = new String[] {"table_id = ?", currentTableId};
         ArrayList<Table> list = (ArrayList<Table>) DataBaseManager.getInstance().query(currentTableType, queryCondition[0], queryCondition[1]);
@@ -90,9 +95,10 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
         currentType++;
         if (currentType >= types.length) {
             currentType = 0;
+        } else if (currentType < 0) {
+            currentType = types.length - 1;
         }
         btType.setText(types[currentType]);
-        Date date = new Date();
         if (currentType == 0) {
             String[] queryCondition = new String[]{"table_id = ?", currentTableId};
             ArrayList<Table> list = (ArrayList<Table>) DataBaseManager.getInstance().query(currentTableType, queryCondition[0], queryCondition[1]);
@@ -115,18 +121,36 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
         currentAccuracy++;
         if (currentAccuracy >= accuracy.values().length) {
             currentAccuracy = 0;
+        } else if (currentAccuracy < 0) {
+            currentAccuracy = accuracy.values().length - 1;
         }
 
         if (currentAccuracy == 0) {
-
+            queryAdapter = new QueryAdapter(mActivity);
+            queryList.setAdapter(queryAdapter);
+            currentTableType = DataBaseManager.TableType.ACCOUNT_DAY;
+            queryAdapter.setAccuracy(accuracy.day);
+            currentType--;
+            changeType();
         } else if (currentAccuracy == 1) {
-
-
-
+            queryAdapter = new QueryAdapter(mActivity);
+            queryList.setAdapter(queryAdapter);
+            queryAdapter.setAccuracy(accuracy.month);
+            currentTableType = DataBaseManager.TableType.ACCOUNT_MONTH_AND_YEAR;
+            String[] condition = new String[] {"table_id = ?", DataBaseManager.getInstance().getTabeId(currentTableType, currentDate, DataBaseManager.FilterAccuracy.year)};
+            ArrayList<Table> list = (ArrayList<Table>) DataBaseManager.getInstance().query(currentTableType, condition[0], condition[1]);
+            queryAdapter.setData(list);
+            queryAdapter.notifyDataSetChanged();
         } else if (currentAccuracy == 2) {
-
+            queryAdapter = new QueryAdapter(mActivity);
+            queryList.setAdapter(queryAdapter);
+            queryAdapter.setAccuracy(accuracy.year);
+            currentTableType = DataBaseManager.TableType.ACCOUNT_MONTH_AND_YEAR;
+            String[] condition = new String[] {"table_id = ?", DataBaseManager.getInstance().getTabeId(currentTableType, currentDate, DataBaseManager.FilterAccuracy.all)};
+            ArrayList<Table> list = (ArrayList<Table>) DataBaseManager.getInstance().query(currentTableType, condition[0], condition[1]);
+            queryAdapter.setData(list);
+            queryAdapter.notifyDataSetChanged();
         }
-
     }
 
     @Override
