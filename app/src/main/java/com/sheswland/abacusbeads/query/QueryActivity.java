@@ -12,22 +12,17 @@ import com.sheswland.abacusbeads.BaseActivity;
 import com.sheswland.abacusbeads.R;
 import com.sheswland.abacusbeads.database.DataBaseManager;
 import com.sheswland.abacusbeads.database.database_interface.Table;
-import com.sheswland.abacusbeads.database.tables.AccountMonthAndYearTable;
-import com.sheswland.abacusbeads.database.tables.OperateDataTable;
 import com.sheswland.abacusbeads.query.adapter.QueryAdapter;
 import com.sheswland.abacusbeads.utils.DebugLog;
 
-import org.litepal.LitePal;
-
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class QueryActivity extends BaseActivity implements View.OnClickListener {
 
     private final String TAG = "QueryActivity";
 
-    private final String[] types = new String[] {"类型", "支出", "收入"};
+    public static final String[] types = new String[] {"类型", "支出", "收入"};
     public enum accuracy{
         year,
         month,
@@ -40,14 +35,13 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
     private QueryAdapter queryAdapter;
     private TextView btPrint;
     private TextView btOpenFileSystem;
-//    private TextView btDate;
-//    private TextView btType;
 
-    private int currentType;
+    public int currentType;
     private int currentAccuracy;
     private String currentTableId;
     private DataBaseManager.TableType currentTableType;
     private Date currentDate;
+    private QueryAdapter.TitleBarListener adapterTitleListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,17 +58,25 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
         btPrint = findViewById(R.id.bt_print);
         btOpenFileSystem = findViewById(R.id.bt_open_file_system);
         queryList = findViewById(R.id.query_list);
-//        btDate = findViewById(R.id.bt_date);
-//        btType = findViewById(R.id.bt_type);
     }
 
     private void initViews() {
         logo.setOnClickListener(this);
         btPrint.setOnClickListener(this);
         btOpenFileSystem.setOnClickListener(this);
-//        btDate.setOnClickListener(this);
-//        btType.setOnClickListener(this);
-        queryAdapter = new QueryAdapter(mActivity);
+
+        adapterTitleListener = new QueryAdapter.TitleBarListener() {
+            @Override
+            public void onDateClick() {
+
+            }
+
+            @Override
+            public void onTypeClick() {
+                changeType();
+            }
+        };
+        queryAdapter = new QueryAdapter(mActivity, adapterTitleListener);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(mActivity);
         queryList.setLayoutManager(manager);
         queryList.setAdapter(queryAdapter);
@@ -89,6 +91,7 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
         ArrayList<Table> list = (ArrayList<Table>) DataBaseManager.getInstance().query(currentTableType, queryCondition[0], queryCondition[1]);
         queryAdapter.setData(list);
         queryAdapter.notifyDataSetChanged();
+
     }
 
     private void changeType() {
@@ -98,7 +101,6 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
         } else if (currentType < 0) {
             currentType = types.length - 1;
         }
-//        btType.setText(types[currentType]);
         if (currentType == 0) {
             String[] queryCondition = new String[]{"table_id = ?", currentTableId};
             ArrayList<Table> list = (ArrayList<Table>) DataBaseManager.getInstance().query(currentTableType, queryCondition[0], queryCondition[1]);
@@ -126,14 +128,14 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
         }
 
         if (currentAccuracy == 0) {
-            queryAdapter = new QueryAdapter(mActivity);
+            queryAdapter = new QueryAdapter(mActivity, adapterTitleListener);
             queryList.setAdapter(queryAdapter);
             currentTableType = DataBaseManager.TableType.ACCOUNT_DAY;
             queryAdapter.setAccuracy(accuracy.day);
             currentType--;
             changeType();
         } else if (currentAccuracy == 1) {
-            queryAdapter = new QueryAdapter(mActivity);
+            queryAdapter = new QueryAdapter(mActivity, adapterTitleListener);
             queryList.setAdapter(queryAdapter);
             queryAdapter.setAccuracy(accuracy.month);
             currentTableType = DataBaseManager.TableType.ACCOUNT_MONTH_AND_YEAR;
@@ -142,7 +144,7 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
             queryAdapter.setData(list);
             queryAdapter.notifyDataSetChanged();
         } else if (currentAccuracy == 2) {
-            queryAdapter = new QueryAdapter(mActivity);
+            queryAdapter = new QueryAdapter(mActivity, adapterTitleListener);
             queryList.setAdapter(queryAdapter);
             queryAdapter.setAccuracy(accuracy.year);
             currentTableType = DataBaseManager.TableType.ACCOUNT_MONTH_AND_YEAR;
@@ -162,10 +164,6 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
             DebugLog.d(TAG, "bt print");
         } else if (id == R.id.bt_open_file_system) {
             DebugLog.d(TAG, "bt open file system");
-        } else if (id == R.id.bt_date) {
-
-        } else if (id == R.id.bt_type) {
-            changeType();
         }
     }
 }

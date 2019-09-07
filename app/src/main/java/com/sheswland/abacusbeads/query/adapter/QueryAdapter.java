@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sheswland.abacusbeads.R;
@@ -18,7 +19,7 @@ import com.sheswland.abacusbeads.utils.DebugLog;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QueryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class QueryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
     private final String TAG = "QueryAdapter";
 
     private int itemTypeTitle = 0;
@@ -26,12 +27,15 @@ public class QueryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private Activity mAcivity;
     private List<Table> dataList;
+    private TitleBarListener mTitleBarListener;
+    private TitleViewHolder titleViewHolder;
 
     private QueryActivity.accuracy accuracy = QueryActivity.accuracy.day;
 
-    public QueryAdapter(Activity activity) {
+    public QueryAdapter(Activity activity, TitleBarListener listener) {
         DebugLog.d(TAG, "init");
         mAcivity = activity;
+        this.mTitleBarListener = listener;
         dataList = new ArrayList<>();
     }
 
@@ -50,11 +54,13 @@ public class QueryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         if (itemType == itemTypeTitle) {
             if (accuracy == QueryActivity.accuracy.day) {
-                View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.query_title_day, viewGroup, false);
-                return new TitleViewHolder(view);
+                TitleViewHolder view = new TitleViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.query_title_day, viewGroup, false));
+                titleViewHolder = view;
+                return view;
             } else if (accuracy == QueryActivity.accuracy.month || accuracy == QueryActivity.accuracy.year) {
-                View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.query_title_month_and_year, viewGroup, false);
-                return new TitleViewHolder(view);
+                TitleViewHolder view = new TitleViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.query_title_month_and_year, viewGroup, false));
+                titleViewHolder = view;
+                return view;
             }
         } else if (itemType == itemTypeContent) {
             if (accuracy == QueryActivity.accuracy.day) {
@@ -80,15 +86,18 @@ public class QueryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ((DayViewHolder)myViewHolder).type.setText(table.isIncome() ? "收入" : "支出");
             ((DayViewHolder)myViewHolder).spend.setText(String.valueOf(table.getSpend()));
             ((DayViewHolder)myViewHolder).remain.setText(String.valueOf(table.getRemain()));
-
         } else if (myViewHolder instanceof MonthAndYearViewHolder) {
             AccountMonthAndYearTable table = (AccountMonthAndYearTable) dataList.get(i);
             ((MonthAndYearViewHolder)myViewHolder).date.setText(table.getDate());
             ((MonthAndYearViewHolder)myViewHolder).income.setText(String.valueOf(table.getIncome()));
             ((MonthAndYearViewHolder)myViewHolder).spend.setText(String.valueOf(table.getSpend()));
             ((MonthAndYearViewHolder)myViewHolder).remain.setText(String.valueOf(table.getRemain()));
+        } else if (myViewHolder instanceof TitleViewHolder) {
+            ((TitleViewHolder) myViewHolder).date.setOnClickListener(this);
+            ((TitleViewHolder) myViewHolder).type.setOnClickListener(this);
         }
     }
+
 
     @Override
     public int getItemCount() {
@@ -101,6 +110,17 @@ public class QueryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             return itemTypeTitle;
         }
         return itemTypeContent;
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.bt_date) {
+            mTitleBarListener.onDateClick();
+        } else if (id == R.id.bt_type) {
+            mTitleBarListener.onTypeClick();
+            titleViewHolder.type.setText(QueryActivity.types[((QueryActivity)mAcivity).currentType]);
+        }
     }
 
     class DayViewHolder extends RecyclerView.ViewHolder {
@@ -143,4 +163,9 @@ public class QueryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
+    /**************** interface ***************/
+    public interface TitleBarListener{
+        void onDateClick();
+        void onTypeClick();
+    }
 }
