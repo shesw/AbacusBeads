@@ -9,19 +9,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sheswland.abacusbeads.R;
-import com.sheswland.abacusbeads.database.database_interface.Table;
 import com.sheswland.abacusbeads.database.tables.AccountDayTable;
 import com.sheswland.abacusbeads.database.tables.AccountMonthAndYearTable;
 import com.sheswland.abacusbeads.query.QueryActivity;
 import com.sheswland.abacusbeads.query.QueryDataManager;
 import com.sheswland.abacusbeads.utils.DebugLog;
 
+import static com.sheswland.abacusbeads.utils.Const.dayTableIncomeType;
+import static com.sheswland.abacusbeads.utils.Const.Accuracy;
+
+
 public class QueryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
     private final String TAG = "QueryAdapter";
-
-    public enum Accuracy{
-        day, month, year
-    }
 
     private int itemTypeTitle = 0;
     private int itemTypeContent = 1;
@@ -125,7 +124,7 @@ public class QueryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mTitleBarListener.onDateClick();
         } else if (id == R.id.bt_type) {
             mTitleBarListener.onTypeClick();
-            titleViewHolder.type.setText(QueryActivity.types[((QueryActivity)mActivity).currentType]);
+            titleViewHolder.type.setText(dayTableIncomeType[((QueryActivity)mActivity).currentType]);
         }
     }
 

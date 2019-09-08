@@ -4,8 +4,11 @@ import com.sheswland.abacusbeads.database.DataBaseManager;
 import com.sheswland.abacusbeads.database.database_interface.Table;
 import com.sheswland.abacusbeads.database.tables.AccountDayTable;
 import com.sheswland.abacusbeads.database.tables.AccountMonthAndYearTable;
+import com.sheswland.abacusbeads.utils.Const;
 
 import java.util.ArrayList;
+
+import static com.sheswland.abacusbeads.utils.Const.TableType.ACCOUNT_MONTH_AND_YEAR;
 
 public class QueryDataManager {
     private final static String TAG = "QueryDataManager";
@@ -33,7 +36,7 @@ public class QueryDataManager {
     }
 
     private void updateDayTableList(String... condition) {
-        ArrayList<AccountDayTable> list = (ArrayList<AccountDayTable>) DataBaseManager.getInstance().query(DataBaseManager.TableType.ACCOUNT_DAY, condition);
+        ArrayList<AccountDayTable> list = (ArrayList<AccountDayTable>) DataBaseManager.getInstance().query(Const.TableType.ACCOUNT_DAY, condition);
         this.mDayTableList.clear();
         this.mDayTableList.addAll(list);
     }
@@ -49,18 +52,18 @@ public class QueryDataManager {
     }
 
     public void updateMontTableList(int year) {
-        ArrayList<AccountMonthAndYearTable> list = (ArrayList<AccountMonthAndYearTable>) DataBaseManager.getInstance().query(DataBaseManager.TableType.ACCOUNT_MONTH_AND_YEAR,
+        ArrayList<AccountMonthAndYearTable> list = (ArrayList<AccountMonthAndYearTable>) DataBaseManager.getInstance().query(ACCOUNT_MONTH_AND_YEAR,
                 "table_id = ? and year = ?",
-                DataBaseManager.getInstance().getTableId(DataBaseManager.TableType.ACCOUNT_MONTH_AND_YEAR, null, DataBaseManager.FilterAccuracy.all_month),
+                DataBaseManager.getInstance().getTableId(ACCOUNT_MONTH_AND_YEAR, null, Const.FilterAccuracy.all_month),
                 String.valueOf(year));
         this.mMonthTableList.clear();
         this.mMonthTableList.addAll(list);
     }
 
     public void updateYearTableList() {
-        ArrayList<AccountMonthAndYearTable> list = (ArrayList<AccountMonthAndYearTable>) DataBaseManager.getInstance().query(DataBaseManager.TableType.ACCOUNT_MONTH_AND_YEAR,
+        ArrayList<AccountMonthAndYearTable> list = (ArrayList<AccountMonthAndYearTable>) DataBaseManager.getInstance().query(ACCOUNT_MONTH_AND_YEAR,
                 "table_id = ?",
-                DataBaseManager.getInstance().getTableId(DataBaseManager.TableType.ACCOUNT_MONTH_AND_YEAR, null, DataBaseManager.FilterAccuracy.all_year));
+                DataBaseManager.getInstance().getTableId(ACCOUNT_MONTH_AND_YEAR, null, Const.FilterAccuracy.all_year));
         this.mYearTableList.clear();
         this.mYearTableList.addAll(list);
     }

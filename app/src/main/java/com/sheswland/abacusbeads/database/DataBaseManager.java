@@ -15,28 +15,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static com.sheswland.abacusbeads.utils.Const.TableType;
+import static com.sheswland.abacusbeads.utils.Const.FilterAccuracy;
+import static com.sheswland.abacusbeads.utils.Const.OPERATE_TABLE_PREFIX;
+
 public class DataBaseManager {
 
     private final static String TAG = "DataBaseManager";
-
-    public final static String OPERATE_TABLE_PREFIX = "operate_tab_";
-
-    public enum TableType {
-        OPERATE_TAB,
-        ACCOUNT_DAY,
-        ACCOUNT_MONTH_AND_YEAR
-    }
-
-    public enum FilterAccuracy {
-        all_month,
-        all_year,
-        year,
-        month,
-        day,
-        hour,
-        minute,
-        second,
-    }
 
     private static DataBaseManager _Holder;
 

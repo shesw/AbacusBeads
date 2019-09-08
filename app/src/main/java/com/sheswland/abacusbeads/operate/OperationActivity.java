@@ -18,6 +18,7 @@ import com.sheswland.abacusbeads.database.DataBaseManager;
 import com.sheswland.abacusbeads.database.tables.AccountDayTable;
 import com.sheswland.abacusbeads.database.tables.AccountMonthAndYearTable;
 import com.sheswland.abacusbeads.database.tables.OperateDataTable;
+import com.sheswland.abacusbeads.utils.Const;
 import com.sheswland.abacusbeads.utils.DebugLog;
 import com.sheswland.abacusbeads.utils.JumperHelper;
 import com.sheswland.abacusbeads.utils.TextUtil;
@@ -83,7 +84,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
         }
         operateDataTable = new OperateDataTable();
         inputDate.setText(getTime(date));
-        operateDataTable = (OperateDataTable) DataBaseManager.getInstance().produceTable(DataBaseManager.TableType.OPERATE_TAB, date, operateDataTable);
+        operateDataTable = (OperateDataTable) DataBaseManager.getInstance().produceTable(Const.TableType.OPERATE_TAB, date, operateDataTable);
     }
 
 //    private void initTimer() {
@@ -144,7 +145,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
                 String dateString = getTime(date);
                 DebugLog.d(TAG, "date" + dateString);
                 inputDate.setText(dateString);
-                operateDataTable = (OperateDataTable) DataBaseManager.getInstance().produceTable(DataBaseManager.TableType.OPERATE_TAB, date, operateDataTable);
+                operateDataTable = (OperateDataTable) DataBaseManager.getInstance().produceTable(Const.TableType.OPERATE_TAB, date, operateDataTable);
                 DebugLog.d(TAG, "date");
                 DebugLog.d(TAG, operateDataTable.getYear() + "");
                 DebugLog.d(TAG, operateDataTable.getMonth() + "");

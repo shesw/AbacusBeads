@@ -14,23 +14,19 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.sheswland.abacusbeads.BaseActivity;
 import com.sheswland.abacusbeads.R;
-import com.sheswland.abacusbeads.database.DataBaseManager;
-import com.sheswland.abacusbeads.database.database_interface.Table;
-import com.sheswland.abacusbeads.database.tables.OperateDataTable;
 import com.sheswland.abacusbeads.query.adapter.QueryAdapter;
+import com.sheswland.abacusbeads.utils.Const;
 import com.sheswland.abacusbeads.utils.DebugLog;
 import com.sheswland.abacusbeads.utils.TextUtil;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import static com.sheswland.abacusbeads.utils.Const.dayTableIncomeType;
 
 public class QueryActivity extends BaseActivity implements View.OnClickListener {
 
     private final String TAG = "QueryActivity";
-
-    public static final String[] types = new String[] {"类型", "支出", "收入"};
 
     private Activity mActivity;
     private SimpleDraweeView logo;
@@ -99,13 +95,13 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
     /******************* logic change *********************/
     private void changeAccuracy() {
         queryAdapter.currentAccuracy++;
-        if (queryAdapter.currentAccuracy >= QueryAdapter.Accuracy.values().length) {
+        if (queryAdapter.currentAccuracy >= Const.Accuracy.values().length) {
             queryAdapter.currentAccuracy = 0;
         } else if (queryAdapter.currentAccuracy < 0) {
-            queryAdapter.currentAccuracy = QueryAdapter.Accuracy.values().length - 1;
+            queryAdapter.currentAccuracy = Const.Accuracy.values().length - 1;
         }
 
-        if (queryAdapter.currentAccuracy == QueryAdapter.Accuracy.day.ordinal()) {
+        if (queryAdapter.currentAccuracy == Const.Accuracy.day.ordinal()) {
             if (currentType == 0) {
                 QueryDataManager.getInstance().updateDayTableList(mYear, mMonth);
             } else {
@@ -113,30 +109,30 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
             }
             queryAdapter = new QueryAdapter(mActivity, adapterTitleListener);
             queryList.setAdapter(queryAdapter);
-            queryAdapter.setAccuracy(QueryAdapter.Accuracy.day.ordinal());
+            queryAdapter.setAccuracy(Const.Accuracy.day.ordinal());
             currentType--;
             changeType();
-        } else if (queryAdapter.currentAccuracy == QueryAdapter.Accuracy.month.ordinal()) {
+        } else if (queryAdapter.currentAccuracy == Const.Accuracy.month.ordinal()) {
             QueryDataManager.getInstance().updateMontTableList(mYear);
             queryAdapter = new QueryAdapter(mActivity, adapterTitleListener);
             queryList.setAdapter(queryAdapter);
-            queryAdapter.setAccuracy(QueryAdapter.Accuracy.month.ordinal());
+            queryAdapter.setAccuracy(Const.Accuracy.month.ordinal());
             queryAdapter.notifyDataSetChanged();
-        } else if (queryAdapter.currentAccuracy == QueryAdapter.Accuracy.year.ordinal()) {
+        } else if (queryAdapter.currentAccuracy == Const.Accuracy.year.ordinal()) {
             QueryDataManager.getInstance().updateYearTableList();
             queryAdapter = new QueryAdapter(mActivity, adapterTitleListener);
             queryList.setAdapter(queryAdapter);
-            queryAdapter.setAccuracy(QueryAdapter.Accuracy.year.ordinal());
+            queryAdapter.setAccuracy(Const.Accuracy.year.ordinal());
             queryAdapter.notifyDataSetChanged();
         }
     }
 
     private void changeType() {
         currentType++;
-        if (currentType >= types.length) {
+        if (currentType >= dayTableIncomeType.length) {
             currentType = 0;
         } else if (currentType < 0) {
-            currentType = types.length - 1;
+            currentType = dayTableIncomeType.length - 1;
         }
         if (currentType == 0) {
             QueryDataManager.getInstance().updateDayTableList(mYear, mMonth);
@@ -158,10 +154,10 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
             @Override
             public void onTimeSelect(Date date, View v) {
                 currentType--;
-                if (currentType >= types.length) {
+                if (currentType >= dayTableIncomeType.length) {
                     currentType = 0;
                 } else if (currentType < 0) {
-                    currentType = types.length - 1;
+                    currentType = dayTableIncomeType.length - 1;
                 }
                 int[] time = TextUtil.getYMD(date);
                 currentDate = date;
