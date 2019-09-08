@@ -19,23 +19,18 @@ import com.sheswland.abacusbeads.database.database_interface.Table;
 import com.sheswland.abacusbeads.database.tables.OperateDataTable;
 import com.sheswland.abacusbeads.query.adapter.QueryAdapter;
 import com.sheswland.abacusbeads.utils.DebugLog;
+import com.sheswland.abacusbeads.utils.TextUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-
-import static com.sheswland.abacusbeads.utils.TextUtil.getTime;
 
 public class QueryActivity extends BaseActivity implements View.OnClickListener {
 
     private final String TAG = "QueryActivity";
 
     public static final String[] types = new String[] {"类型", "支出", "收入"};
-    public enum accuracy{
-        year,
-        month,
-        day
-    }
 
     private Activity mActivity;
     private SimpleDraweeView logo;
@@ -45,10 +40,11 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
     private TextView btOpenFileSystem;
 
     public int currentType;
-    private int currentAccuracy;
-    private String currentTableId;
     private DataBaseManager.TableType currentTableType;
     private Date currentDate;
+    private int mYear;
+    private int mMonth;
+    private int mDay;
     private QueryAdapter.TitleBarListener adapterTitleListener;
 
     @Override
@@ -91,15 +87,45 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void initQueryData() {
-        currentTableType = DataBaseManager.TableType.ACCOUNT_DAY;
-        currentDate = new Date();
-        currentTableId = DataBaseManager.getInstance().getTableId(currentTableType, currentDate, DataBaseManager.FilterAccuracy.month);
-        DebugLog.d(TAG, "currentTableId " + currentTableId);
-        String[] queryCondition = new String[] {"table_id = ?", currentTableId};
-        ArrayList<Table> list = (ArrayList<Table>) DataBaseManager.getInstance().query(currentTableType, queryCondition[0], queryCondition[1]);
-        queryAdapter.setData(list);
+        Date date = new Date();
+        int[] ymd = TextUtil.getYMD(date);
+        currentDate = date;
+        mYear = ymd[0];
+        mMonth = ymd[1];
+        mDay = ymd[2];
+        QueryDataManager.getInstance().updateDayTableList(mYear, mMonth);
         queryAdapter.notifyDataSetChanged();
+    }
 
+    /******************* logic change *********************/
+    private void changeAccuracy() {
+        queryAdapter.currentAccuracy++;
+        if (queryAdapter.currentAccuracy >= QueryAdapter.Accuracy.values().length) {
+            queryAdapter.currentAccuracy = 0;
+        } else if (queryAdapter.currentAccuracy < 0) {
+            queryAdapter.currentAccuracy = QueryAdapter.Accuracy.values().length - 1;
+        }
+
+        if (queryAdapter.currentAccuracy == QueryAdapter.Accuracy.day.ordinal()) {
+            queryAdapter = new QueryAdapter(mActivity, adapterTitleListener);
+            queryList.setAdapter(queryAdapter);
+            currentTableType = DataBaseManager.TableType.ACCOUNT_DAY;
+            queryAdapter.setAccuracy(QueryAdapter.Accuracy.day.ordinal());
+            currentType--;
+            changeType();
+        } else if (queryAdapter.currentAccuracy == QueryAdapter.Accuracy.month.ordinal()) {
+            queryAdapter = new QueryAdapter(mActivity, adapterTitleListener);
+            queryList.setAdapter(queryAdapter);
+            queryAdapter.setAccuracy(QueryAdapter.Accuracy.month.ordinal());
+            currentTableType = DataBaseManager.TableType.ACCOUNT_MONTH_AND_YEAR;
+            queryAdapter.notifyDataSetChanged();
+        } else if (queryAdapter.currentAccuracy == QueryAdapter.Accuracy.year.ordinal()) {
+            queryAdapter = new QueryAdapter(mActivity, adapterTitleListener);
+            queryList.setAdapter(queryAdapter);
+            queryAdapter.setAccuracy(QueryAdapter.Accuracy.year.ordinal());
+            currentTableType = DataBaseManager.TableType.ACCOUNT_MONTH_AND_YEAR;
+            queryAdapter.notifyDataSetChanged();
+        }
     }
 
     private void changeType() {
@@ -109,62 +135,21 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
         } else if (currentType < 0) {
             currentType = types.length - 1;
         }
-        DebugLog.d(TAG, "change type " + currentTableId);
         if (currentType == 0) {
-            String[] queryCondition = new String[]{"table_id = ?", currentTableId};
-            ArrayList<Table> list = (ArrayList<Table>) DataBaseManager.getInstance().query(currentTableType, queryCondition[0], queryCondition[1]);
-            queryAdapter.setData(list);
+            QueryDataManager.getInstance().updateDayTableList(mYear, mMonth);
             queryAdapter.notifyDataSetChanged();
         } else if (currentType == 1) {
-            String[] queryCondition = new String[]{"table_id = ? and isIncome = ?",currentTableId, "0"};
-            ArrayList<Table> list = (ArrayList<Table>) DataBaseManager.getInstance().query(currentTableType, queryCondition[0], queryCondition[1], queryCondition[2]);
-            queryAdapter.setData(list);
-            queryAdapter.notifyDataSetChanged();
+            QueryDataManager.getInstance().updateDayTableList(mYear, mMonth, false);
+            queryAdapter.notifyDataSetChanged();;
         } else if (currentType == 2) {
-            String[] queryCondition = new String[]{"table_id = ? and isIncome = ?", currentTableId, "1"};
-            ArrayList<Table> list = (ArrayList<Table>) DataBaseManager.getInstance().query(currentTableType, queryCondition[0], queryCondition[1], queryCondition[2]);
-            queryAdapter.setData(list);
-            queryAdapter.notifyDataSetChanged();
-        }
-    }
-
-    private void changeAccuracy() {
-        currentAccuracy++;
-        if (currentAccuracy >= accuracy.values().length) {
-            currentAccuracy = 0;
-        } else if (currentAccuracy < 0) {
-            currentAccuracy = accuracy.values().length - 1;
-        }
-
-        if (currentAccuracy == 0) {
-            queryAdapter = new QueryAdapter(mActivity, adapterTitleListener);
-            queryList.setAdapter(queryAdapter);
-            currentTableType = DataBaseManager.TableType.ACCOUNT_DAY;
-            queryAdapter.setAccuracy(accuracy.day);
-            currentType--;
-            changeType();
-        } else if (currentAccuracy == 1) {
-            queryAdapter = new QueryAdapter(mActivity, adapterTitleListener);
-            queryList.setAdapter(queryAdapter);
-            queryAdapter.setAccuracy(accuracy.month);
-            currentTableType = DataBaseManager.TableType.ACCOUNT_MONTH_AND_YEAR;
-            String[] condition = new String[] {"table_id = ?", DataBaseManager.getInstance().getTableId(currentTableType, currentDate, DataBaseManager.FilterAccuracy.all_month)};
-            ArrayList<Table> list = (ArrayList<Table>) DataBaseManager.getInstance().query(currentTableType, condition[0], condition[1]);
-            queryAdapter.setData(list);
-            queryAdapter.notifyDataSetChanged();
-        } else if (currentAccuracy == 2) {
-            queryAdapter = new QueryAdapter(mActivity, adapterTitleListener);
-            queryList.setAdapter(queryAdapter);
-            queryAdapter.setAccuracy(accuracy.year);
-            currentTableType = DataBaseManager.TableType.ACCOUNT_MONTH_AND_YEAR;
-            String[] condition = new String[] {"table_id = ?", DataBaseManager.getInstance().getTableId(currentTableType, currentDate, DataBaseManager.FilterAccuracy.all_year)};
-            ArrayList<Table> list = (ArrayList<Table>) DataBaseManager.getInstance().query(currentTableType, condition[0], condition[1]);
-            queryAdapter.setData(list);
+            QueryDataManager.getInstance().updateDayTableList(mYear, mMonth, true);
             queryAdapter.notifyDataSetChanged();
         }
     }
 
     private void chooseDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
         //时间选择器
         TimePickerView pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
             @Override
@@ -175,11 +160,12 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
                 } else if (currentType < 0) {
                     currentType = types.length - 1;
                 }
-                SimpleDateFormat format = new SimpleDateFormat("yyyyMM");
-                String timeString = format.format(date);
-                currentTableId = DataBaseManager.getInstance().getTableId(currentTableType, timeString);
+                int[] time = TextUtil.getYMD(date);
+                currentDate = date;
+                mYear = time[0];
+                mMonth = time[1];
+                mDay = time[2];
                 changeType();
-
             }
         }) .setType(new boolean[]{true, true, false, false, false,false})// 默认全部显示
                 .setCancelText("Cancel")//取消按钮文字
@@ -195,7 +181,7 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
                 .setCancelColor(Color.BLUE)//取消按钮文字颜色
                 .setTitleBgColor(0xFF666666)//标题背景颜色 Night mode
                 .setBgColor(0xFF333333)//滚轮背景颜色 Night mode
-//                .setDate(selectedDate)// 如果不设置的话，默认是系统时间*/
+                .setDate(calendar)// 如果不设置的话，默认是系统时间*/
 //                .setRangDate(startDate,endDate)//起始终止年月日设定
                 .setLabel("年","月","日","时","分","秒")//默认设置为年月日时分秒
                 .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。

@@ -212,6 +212,9 @@ public class DataBaseManager {
         dayTable.setSpend(table.getSpend());
         dayTable.setIncome(table.isIncome());
         dayTable.setRemain(table.getRemain());
+        dayTable.setYear(table.getYear());
+        dayTable.setMonth(table.getMonth());
+        dayTable.setDay(table.getDay());
         DebugLog.d(TAG, "table_id " + tableId);
         dayTable.save();
     }
@@ -261,7 +264,9 @@ public class DataBaseManager {
             monthAndYearTable.setSpend(table1.getSpend() + table.getSpend());
             monthAndYearTable.setRemain(table1.getRemain() - table.getSpend());
         }
-
+        monthAndYearTable.setYear(table.getYear());
+        monthAndYearTable.setMonth(table.getMonth());
+        monthAndYearTable.setDay(table.getDay());
         if (isMonth) {
             delete(TableType.ACCOUNT_MONTH_AND_YEAR, "table_id = ? and date = ?", tableId, table.getYear() + "" + table.getMonth() + "");
         } else {

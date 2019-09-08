@@ -4,6 +4,7 @@ import com.sheswland.abacusbeads.database.database_interface.Table;
 import com.sheswland.abacusbeads.database.tables.OperateDataTable;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class TextUtil {
@@ -31,5 +32,15 @@ public class TextUtil {
         SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒");
         String timeString = format.format(date);
         return timeString;
+    }
+
+    public static int[] getYMD(Date date) {
+        int[] res = new int[3];
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        res[0] = calendar.get(Calendar.YEAR);
+        res[1] = calendar.get(Calendar.MONTH) + 1;
+        res[2] = calendar.get(Calendar.DAY_OF_MONTH);
+        return res;
     }
 }

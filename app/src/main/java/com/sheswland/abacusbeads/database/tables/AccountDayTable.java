@@ -9,6 +9,9 @@ public class AccountDayTable extends LitePalSupport implements Table {
     private String table_id;
 
     private String date;
+    private int year;
+    private int month;
+    private int day;
     private String content;
     private boolean isIncome;
     private float spend;
@@ -16,6 +19,30 @@ public class AccountDayTable extends LitePalSupport implements Table {
 
     public String getTable_id() {
         return table_id;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
     }
 
     public void setTable_id(String table_id) {
