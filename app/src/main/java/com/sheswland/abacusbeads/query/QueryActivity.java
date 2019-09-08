@@ -107,6 +107,29 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
         permissionHelper = new PermissionHelper(this, this);
     }
 
+    private void handleTimeChoose(Date date) {
+        if (queryAdapter.currentAccuracy == Const.Accuracy.day.ordinal()) {
+            currentType--;
+            if (currentType >= dayTableIncomeType.length) {
+                currentType = 0;
+            } else if (currentType < 0) {
+                currentType = dayTableIncomeType.length - 1;
+            }
+            int[] time = TextUtil.getYMD(date);
+            currentDate = date;
+            mYear = time[0];
+            mMonth = time[1];
+            mDay = time[2];
+            changeType();
+        } else if (queryAdapter.currentAccuracy == Const.Accuracy.month.ordinal()) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            mYear = calendar.get(Calendar.YEAR) + 1;
+            QueryDataManager.getInstance().updateMontTableList(mYear);
+            queryAdapter.notifyDataSetChanged();
+        }
+    }
+
     /******************* logic change *********************/
     private void changeAccuracy() {
         queryAdapter.currentAccuracy++;
@@ -169,18 +192,7 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
         TimePickerView pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
-                currentType--;
-                if (currentType >= dayTableIncomeType.length) {
-                    currentType = 0;
-                } else if (currentType < 0) {
-                    currentType = dayTableIncomeType.length - 1;
-                }
-                int[] time = TextUtil.getYMD(date);
-                currentDate = date;
-                mYear = time[0];
-                mMonth = time[1];
-                mDay = time[2];
-                changeType();
+                handleTimeChoose(date);
             }
         }) .setType(new boolean[]{true, queryAdapter.currentAccuracy == Const.Accuracy.day.ordinal(), false, false, false,false})// 默认全部显示
                 .setCancelText("Cancel")//取消按钮文字
