@@ -43,4 +43,8 @@ public class TextUtil {
         res[2] = calendar.get(Calendar.DAY_OF_MONTH);
         return res;
     }
+
+    public static String formatNumber2xx(int i) {
+        return i > 9 ? String.valueOf(i) : "0" + i;
+    }
 }

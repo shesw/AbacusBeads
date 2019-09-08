@@ -13,11 +13,13 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.sheswland.abacusbeads.BaseActivity;
+import com.sheswland.abacusbeads.FileController;
 import com.sheswland.abacusbeads.R;
 import com.sheswland.abacusbeads.query.adapter.QueryAdapter;
 import com.sheswland.abacusbeads.utils.Const;
 import com.sheswland.abacusbeads.utils.DebugLog;
 import com.sheswland.abacusbeads.utils.TextUtil;
+import com.sheswland.abacusbeads.utils.TipUtils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -198,6 +200,10 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
             changeAccuracy();
         } else if (id == R.id.bt_print) {
             DebugLog.d(TAG, "bt print");
+            int[] ydm = new int[] {mYear, mMonth, mDay};
+            FileController.getInstance().printTable2SD(Const.TableType.ACCOUNT_DAY, Const.Accuracy.month, ydm);
+            FileController.getInstance().printTable2SD(Const.TableType.ACCOUNT_MONTH_AND_YEAR, Const.Accuracy.year, ydm);
+            TipUtils.showMidToast(mActivity, "ok");
         } else if (id == R.id.bt_open_file_system) {
             DebugLog.d(TAG, "bt open file system");
         }
