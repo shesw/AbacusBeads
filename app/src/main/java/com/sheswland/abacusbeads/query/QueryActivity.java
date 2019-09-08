@@ -206,8 +206,9 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
 
     private void print() {
         int[] ydm = new int[] {mYear, mMonth, mDay};
-        FileController.getInstance().printTable2SD(Const.TableType.ACCOUNT_DAY, Const.Accuracy.month, ydm);
+        FileController.getInstance().printTable2SD(Const.TableType.ACCOUNT_DAY, Const.Accuracy.year, ydm);
         FileController.getInstance().printTable2SD(Const.TableType.ACCOUNT_MONTH_AND_YEAR, Const.Accuracy.year, ydm);
+        FileController.getInstance().printTable2SD(Const.TableType.ACCOUNT_MONTH_AND_YEAR, Const.Accuracy.all, ydm);
         TipUtils.showMidToast(mActivity, "ok");
     }
 

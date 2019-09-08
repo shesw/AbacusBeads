@@ -17,7 +17,7 @@ public class Const {
     public static final String[] dayTableIncomeType = new String[] {"类型", "支出", "收入"};
 
     public enum Accuracy{
-        day, month, year
+        day, month, year, all
     }
 
     public final static String OPERATE_TABLE_PREFIX = "operate_tab_";

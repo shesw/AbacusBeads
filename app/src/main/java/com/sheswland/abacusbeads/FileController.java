@@ -36,9 +36,9 @@ public class FileController {
         if (type == TableType.ACCOUNT_DAY) {
             printDayTable(time, filePath);
         } else if (type == TableType.ACCOUNT_MONTH_AND_YEAR) {
-            if (accuracy == Const.Accuracy.month) {
+            if (accuracy == Const.Accuracy.year) {
                 printMonthTable(time, filePath);
-            } else {
+            } else if (accuracy == Const.Accuracy.all) {
                 printYearTable(filePath);
             }
         }
