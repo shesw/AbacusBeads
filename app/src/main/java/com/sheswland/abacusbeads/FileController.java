@@ -27,7 +27,7 @@ public class FileController {
         return _HOLDER;
     }
 
-    public void printTable2SD(Const.TableType type, Const.Accuracy accuracy, int[] time) {
+    public void printTable2SD(Const.TableType type, Const.FilterAccuracy accuracy, int[] time) {
         String filePath = Const.getPrintPath(Const.subFileName);
         File fileDirectory = new File(filePath);
         if (!fileDirectory.exists()) {
@@ -36,9 +36,9 @@ public class FileController {
         if (type == TableType.ACCOUNT_DAY) {
             printDayTable(time, filePath);
         } else if (type == TableType.ACCOUNT_MONTH_AND_YEAR) {
-            if (accuracy == Const.Accuracy.year) {
+            if (accuracy == Const.FilterAccuracy.all_month) {
                 printMonthTable(time, filePath);
-            } else if (accuracy == Const.Accuracy.all) {
+            } else if (accuracy == Const.FilterAccuracy.all_year) {
                 printYearTable(filePath);
             }
         }
