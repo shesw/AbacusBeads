@@ -223,55 +223,66 @@ public class DataBaseManager {
         String tableId = getTableId(TableType.ACCOUNT_MONTH_AND_YEAR, table.getDate(), FilterAccuracy.all_month);
         DebugLog.d(TAG, "saveAccountMonthTable tableId " + tableId);
         String date = TextUtil.formatDate2yyyyMM(table);
-        saveAccountMonthAndYearTable(table, tableId, date, true);
+
+        ArrayList<AccountMonthAndYearTable> list = (ArrayList<AccountMonthAndYearTable>) LitePal.where("table_id = ? and year = ? and month = ?", tableId, String.valueOf(table.getYear()), String.valueOf(table.getMonth())).find(AccountMonthAndYearTable.class);
+        AccountMonthAndYearTable accountMonthAndYearTable;
+        DebugLog.d(TAG, "saveAccountMonthTable list.size() " + list.size() + " " + tableId + " " + String.valueOf(table.getYear()));
+        if (list.size() > 0) {
+            accountMonthAndYearTable = list.get(0);
+        } else {
+            accountMonthAndYearTable = new AccountMonthAndYearTable();
+        }
+
+        accountMonthAndYearTable.setTable_id(tableId);
+        accountMonthAndYearTable.setYear(table.getYear());
+        accountMonthAndYearTable.setMonth(table.getMonth());
+        accountMonthAndYearTable.setDay(table.getDay());
+        accountMonthAndYearTable.setDate(date);
+        if (table.isIncome()) {
+            accountMonthAndYearTable.setIncome(accountMonthAndYearTable.getIncome() + table.getSpend());
+            accountMonthAndYearTable.setSpend(accountMonthAndYearTable.getSpend());
+            accountMonthAndYearTable.setRemain(accountMonthAndYearTable.getRemain() + table.getSpend());
+        } else {
+            accountMonthAndYearTable.setIncome(accountMonthAndYearTable.getIncome());
+            accountMonthAndYearTable.setSpend(accountMonthAndYearTable.getSpend() + table.getSpend());
+            accountMonthAndYearTable.setRemain(accountMonthAndYearTable.getRemain() - table.getSpend());
+        }
+
+//        delete(TableType.ACCOUNT_MONTH_AND_YEAR, "table_id = ? and year = ?", tableId, String.valueOf(table.getYear()));
+        accountMonthAndYearTable.save();
+
     }
 
     private void saveAccountYearTable(OperateDataTable table) {
         String tableId = getTableId(TableType.ACCOUNT_MONTH_AND_YEAR, table.getDate(), FilterAccuracy.all_year);
         DebugLog.d(TAG, "saveAccountYearTable tableId " + tableId);
         String date = table.getYear() + "";
-        saveAccountMonthAndYearTable(table, tableId, date, false);
-    }
 
-    private void saveAccountMonthAndYearTable(OperateDataTable table, String tableId, String date, boolean isMonth) {
-
-        ArrayList<AccountMonthAndYearTable> result = null;
-
-        boolean isAnotherMonth;
-
-        if (isMonth) {
-            result= (ArrayList<AccountMonthAndYearTable>) LitePal.where( "table_id = ? and date = ?", tableId, table.getYear() + "" + table.getMonth() + "").find(AccountMonthAndYearTable.class);
+        ArrayList<AccountMonthAndYearTable> list = (ArrayList<AccountMonthAndYearTable>) LitePal.where("table_id = ? and year = ?", tableId, String.valueOf(table.getYear())).find(AccountMonthAndYearTable.class);
+        AccountMonthAndYearTable accountMonthAndYearTable;
+        if (list.size() > 0) {
+            accountMonthAndYearTable = list.get(0);
         } else {
-            result= (ArrayList<AccountMonthAndYearTable>) LitePal.where("table_id = ? and date = ?", tableId, table.getYear() +"").find(AccountMonthAndYearTable.class);
-        }
-        AccountMonthAndYearTable table1 = null;
-        if (result.size() > 0) {
-            table1 = result.get(0);
-        } else {
-            table1 = new AccountMonthAndYearTable();
+            accountMonthAndYearTable = new AccountMonthAndYearTable();
         }
 
-        AccountMonthAndYearTable monthAndYearTable = new AccountMonthAndYearTable();
-        monthAndYearTable.setTable_id(tableId);
-        DebugLog.d(TAG, "saveAccountMonthAndYearTable tableId " + tableId);
-        monthAndYearTable.setDate(date);
+        accountMonthAndYearTable.setTable_id(tableId);
+        accountMonthAndYearTable.setYear(table.getYear());
+        accountMonthAndYearTable.setMonth(table.getMonth());
+        accountMonthAndYearTable.setDay(table.getDay());
+        accountMonthAndYearTable.setDate(date);
         if (table.isIncome()) {
-            monthAndYearTable.setIncome(table1.getIncome() + table.getSpend());
-            monthAndYearTable.setSpend(table1.getSpend());
-            monthAndYearTable.setRemain(table1.getRemain() + table.getSpend());
+            accountMonthAndYearTable.setIncome(accountMonthAndYearTable.getIncome() + table.getSpend());
+            accountMonthAndYearTable.setSpend(accountMonthAndYearTable.getSpend());
+            accountMonthAndYearTable.setRemain(accountMonthAndYearTable.getRemain() + table.getSpend());
         } else {
-            monthAndYearTable.setIncome(table1.getIncome());
-            monthAndYearTable.setSpend(table1.getSpend() + table.getSpend());
-            monthAndYearTable.setRemain(table1.getRemain() - table.getSpend());
+            accountMonthAndYearTable.setIncome(accountMonthAndYearTable.getIncome());
+            accountMonthAndYearTable.setSpend(accountMonthAndYearTable.getSpend() + table.getSpend());
+            accountMonthAndYearTable.setRemain(accountMonthAndYearTable.getRemain() - table.getSpend());
         }
-        monthAndYearTable.setYear(table.getYear());
-        monthAndYearTable.setMonth(table.getMonth());
-        monthAndYearTable.setDay(table.getDay());
-        if (isMonth) {
-            delete(TableType.ACCOUNT_MONTH_AND_YEAR, "table_id = ? and date = ?", tableId, table.getYear() + "" + table.getMonth() + "");
-        } else {
-            delete(TableType.ACCOUNT_MONTH_AND_YEAR, "table_id = ? and date = ?", tableId, table.getYear() +"");
-        }
-        monthAndYearTable.save();
+
+//        delete(TableType.ACCOUNT_MONTH_AND_YEAR, "table_id = ?", tableId);
+        accountMonthAndYearTable.save();
     }
+
 }

@@ -48,10 +48,11 @@ public class QueryDataManager {
         updateDayTableList("year = ? and month = ? and isIncome = ?", String.valueOf(year), String.valueOf(month), isIncome ? "1" : "0");
     }
 
-    public void updateMontTableList() {
+    public void updateMontTableList(int year) {
         ArrayList<AccountMonthAndYearTable> list = (ArrayList<AccountMonthAndYearTable>) DataBaseManager.getInstance().query(DataBaseManager.TableType.ACCOUNT_MONTH_AND_YEAR,
-                "table_id = ?",
-                DataBaseManager.getInstance().getTableId(DataBaseManager.TableType.ACCOUNT_MONTH_AND_YEAR, null, DataBaseManager.FilterAccuracy.all_month));
+                "table_id = ? and year = ?",
+                DataBaseManager.getInstance().getTableId(DataBaseManager.TableType.ACCOUNT_MONTH_AND_YEAR, null, DataBaseManager.FilterAccuracy.all_month),
+                String.valueOf(year));
         this.mMonthTableList.clear();
         this.mMonthTableList.addAll(list);
     }

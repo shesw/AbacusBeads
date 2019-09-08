@@ -40,7 +40,6 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
     private TextView btOpenFileSystem;
 
     public int currentType;
-    private DataBaseManager.TableType currentTableType;
     private Date currentDate;
     private int mYear;
     private int mMonth;
@@ -107,23 +106,27 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
         }
 
         if (queryAdapter.currentAccuracy == QueryAdapter.Accuracy.day.ordinal()) {
+            if (currentType == 0) {
+                QueryDataManager.getInstance().updateDayTableList(mYear, mMonth);
+            } else {
+                QueryDataManager.getInstance().updateDayTableList(mYear, mMonth, currentType != 1);
+            }
             queryAdapter = new QueryAdapter(mActivity, adapterTitleListener);
             queryList.setAdapter(queryAdapter);
-            currentTableType = DataBaseManager.TableType.ACCOUNT_DAY;
             queryAdapter.setAccuracy(QueryAdapter.Accuracy.day.ordinal());
             currentType--;
             changeType();
         } else if (queryAdapter.currentAccuracy == QueryAdapter.Accuracy.month.ordinal()) {
+            QueryDataManager.getInstance().updateMontTableList(mYear);
             queryAdapter = new QueryAdapter(mActivity, adapterTitleListener);
             queryList.setAdapter(queryAdapter);
             queryAdapter.setAccuracy(QueryAdapter.Accuracy.month.ordinal());
-            currentTableType = DataBaseManager.TableType.ACCOUNT_MONTH_AND_YEAR;
             queryAdapter.notifyDataSetChanged();
         } else if (queryAdapter.currentAccuracy == QueryAdapter.Accuracy.year.ordinal()) {
+            QueryDataManager.getInstance().updateYearTableList();
             queryAdapter = new QueryAdapter(mActivity, adapterTitleListener);
             queryList.setAdapter(queryAdapter);
             queryAdapter.setAccuracy(QueryAdapter.Accuracy.year.ordinal());
-            currentTableType = DataBaseManager.TableType.ACCOUNT_MONTH_AND_YEAR;
             queryAdapter.notifyDataSetChanged();
         }
     }
@@ -196,7 +199,7 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.logo) {
-//            changeAccuracy();
+            changeAccuracy();
         } else if (id == R.id.bt_print) {
             DebugLog.d(TAG, "bt print");
         } else if (id == R.id.bt_open_file_system) {

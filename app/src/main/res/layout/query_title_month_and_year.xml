@@ -64,6 +64,6 @@
         android:layout_weight="1"
         android:textColor="#ffffff"
         android:gravity="center"
-        android:text="余额"/>
+        android:text="盈余"/>
 
 </LinearLayout>
