@@ -162,6 +162,7 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
     }
 
     private void chooseDate() {
+        if (queryAdapter.currentAccuracy == Const.Accuracy.year.ordinal()) return;
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(currentDate);
         //时间选择器
@@ -181,7 +182,7 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
                 mDay = time[2];
                 changeType();
             }
-        }) .setType(new boolean[]{true, true, false, false, false,false})// 默认全部显示
+        }) .setType(new boolean[]{true, queryAdapter.currentAccuracy == Const.Accuracy.day.ordinal(), false, false, false,false})// 默认全部显示
                 .setCancelText("Cancel")//取消按钮文字
                 .setSubmitText("Sure")//确认按钮文字
                 .setContentTextSize(18)//滚轮文字大小
