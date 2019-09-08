@@ -97,6 +97,7 @@ public class FileController {
                     String.valueOf(time[0]));
 
             for (AccountMonthAndYearTable dayTable : list) {
+                DebugLog.d(TAG, "printMontTable line " + line);
                 writer.write(dayTable.getDate() + divide +
                         dayTable.getSpend() + divide +
                         dayTable.getIncome() + divide +

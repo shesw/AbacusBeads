@@ -1,5 +1,6 @@
 package com.sheswland.abacusbeads.query;
 
+import android.Manifest;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -20,13 +21,16 @@ import com.sheswland.abacusbeads.utils.Const;
 import com.sheswland.abacusbeads.utils.DebugLog;
 import com.sheswland.abacusbeads.utils.TextUtil;
 import com.sheswland.abacusbeads.utils.TipUtils;
+import com.sheswland.abacusbeads.utils.permission.PermissionHelper;
+import com.sheswland.abacusbeads.utils.permission.PermissionInterface;
+import com.sheswland.abacusbeads.utils.permission.PermissionUtil;
 
 import java.util.Calendar;
 import java.util.Date;
 
 import static com.sheswland.abacusbeads.utils.Const.dayTableIncomeType;
 
-public class QueryActivity extends BaseActivity implements View.OnClickListener {
+public class QueryActivity extends BaseActivity implements View.OnClickListener, PermissionInterface {
 
     private final String TAG = "QueryActivity";
 
@@ -44,6 +48,10 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
     private int mDay;
     private QueryAdapter.TitleBarListener adapterTitleListener;
 
+    private PermissionHelper permissionHelper;
+//    private String[] mPermissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA};
+    private String[] mPermissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +60,7 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
         findViews();
         initViews();
         initQueryData();
+        initPermissionHelper();
     }
 
     private void findViews() {
@@ -92,6 +101,10 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
         mDay = ymd[2];
         QueryDataManager.getInstance().updateDayTableList(mYear, mMonth);
         queryAdapter.notifyDataSetChanged();
+    }
+
+    private void initPermissionHelper() {
+        permissionHelper = new PermissionHelper(this, this);
     }
 
     /******************* logic change *********************/
@@ -189,8 +202,13 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
                 .isDialog(true)//是否显示为对话框样式
                 .build();
         pvTime.show();
+    }
 
-
+    private void print() {
+        int[] ydm = new int[] {mYear, mMonth, mDay};
+        FileController.getInstance().printTable2SD(Const.TableType.ACCOUNT_DAY, Const.Accuracy.month, ydm);
+        FileController.getInstance().printTable2SD(Const.TableType.ACCOUNT_MONTH_AND_YEAR, Const.Accuracy.year, ydm);
+        TipUtils.showMidToast(mActivity, "ok");
     }
 
     @Override
@@ -200,12 +218,51 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
             changeAccuracy();
         } else if (id == R.id.bt_print) {
             DebugLog.d(TAG, "bt print");
-            int[] ydm = new int[] {mYear, mMonth, mDay};
-            FileController.getInstance().printTable2SD(Const.TableType.ACCOUNT_DAY, Const.Accuracy.month, ydm);
-            FileController.getInstance().printTable2SD(Const.TableType.ACCOUNT_MONTH_AND_YEAR, Const.Accuracy.year, ydm);
-            TipUtils.showMidToast(mActivity, "ok");
+            permissionHelper.requestPermissions();
         } else if (id == R.id.bt_open_file_system) {
             DebugLog.d(TAG, "bt open file system");
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] mPermissions, int[] grantResults) {
+        if (permissionHelper.requestPermissionsResult(requestCode, mPermissions, grantResults)) {
+            //权限请求结果，并已经处理了该回调
+            return;
+        }
+        super.onRequestPermissionsResult(requestCode, mPermissions, grantResults);
+    }
+
+    @Override
+    public int getPermissionsRequestCode() {
+        return 0;
+    }
+
+    @Override
+    public String[] getPermissions() {
+        return mPermissions;
+    }
+
+    @Override
+    public void requestPermissionsSuccess() {
+        print();
+    }
+
+    @Override
+    public void requestPermissionsFail() {
+
+        StringBuilder sb = new StringBuilder();
+        mPermissions = PermissionUtil.getDeniedPermissions(this, mPermissions);
+        for (String s : mPermissions) {
+            if (s.equals(Manifest.permission.CAMERA)) {
+                sb.append("相机权限(用于拍照，视频聊天);\n");
+            } else if (s.equals(Manifest.permission.RECORD_AUDIO)) {
+                sb.append("麦克风权限(用于发语音，语音及视频聊天);\n");
+            } else if (s.equals(Manifest.permission.READ_EXTERNAL_STORAGE) || s.equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                sb.append("存储,读取权限(用于存储必要信息，缓存数据);\n");
+            }
+        }
+        PermissionUtil.PermissionDialog(this, "程序运行需要如下权限：\n" + sb.toString() + "请在应用权限管理进行设置！");
+
     }
 }
