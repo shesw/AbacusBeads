@@ -16,6 +16,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.sheswland.abacusbeads.BaseActivity;
 import com.sheswland.abacusbeads.FileController;
 import com.sheswland.abacusbeads.R;
+import com.sheswland.abacusbeads.database.DataBaseManager;
 import com.sheswland.abacusbeads.query.adapter.QueryAdapter;
 import com.sheswland.abacusbeads.utils.Const;
 import com.sheswland.abacusbeads.utils.DebugLog;
@@ -28,6 +29,8 @@ import com.sheswland.abacusbeads.utils.permission.PermissionUtil;
 import java.util.Calendar;
 import java.util.Date;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 import static com.sheswland.abacusbeads.utils.Const.dayTableIncomeType;
 
 public class QueryActivity extends BaseActivity implements View.OnClickListener, PermissionInterface {
@@ -39,7 +42,7 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
     private RecyclerView queryList;
     private QueryAdapter queryAdapter;
     private TextView btPrint;
-    private TextView btOpenFileSystem;
+    private TextView btDeleteLastRecord;
 
     public int currentType;
     private Date currentDate;
@@ -66,14 +69,14 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
     private void findViews() {
         logo = findViewById(R.id.logo);
         btPrint = findViewById(R.id.bt_print);
-        btOpenFileSystem = findViewById(R.id.bt_open_file_system);
+        btDeleteLastRecord = findViewById(R.id.delete_last_record);
         queryList = findViewById(R.id.query_list);
     }
 
     private void initViews() {
         logo.setOnClickListener(this);
         btPrint.setOnClickListener(this);
-        btOpenFileSystem.setOnClickListener(this);
+        btDeleteLastRecord.setOnClickListener(this);
 
         adapterTitleListener = new QueryAdapter.TitleBarListener() {
             @Override
@@ -130,6 +133,38 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
         }
     }
 
+    private void popDeleteDialog() {
+        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Delete Last Record")
+                .setContentText("Sure to Delete")
+                .setCancelText("cancel")
+                .setConfirmText("sure")
+                .showCancelButton(true)
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        DataBaseManager.getInstance().deleteLastRecord();
+                        if (currentType == 0) {
+                            QueryDataManager.getInstance().updateDayTableList(mYear, mMonth);
+                        } else if (currentType == 1) {
+                            QueryDataManager.getInstance().updateDayTableList(mYear, mMonth, false);
+                        } else if (currentType == 2) {
+                            QueryDataManager.getInstance().updateDayTableList(mYear, mMonth, true);
+                        }
+                        QueryDataManager.getInstance().updateMontTableList(mYear);
+                        QueryDataManager.getInstance().updateYearTableList();
+                        queryAdapter.notifyDataSetChanged();
+                        sDialog.dismissWithAnimation();
+                    }
+                })
+                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.cancel();
+                    }
+                })
+                .show();
+    }
     /******************* logic change *********************/
     private void changeAccuracy() {
         queryAdapter.currentAccuracy++;
@@ -183,6 +218,7 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
             queryAdapter.notifyDataSetChanged();
         }
     }
+    /*************** logic change end ***********************/
 
     private void chooseDate() {
         if (queryAdapter.currentAccuracy == Const.Accuracy.year.ordinal()) return;
@@ -233,8 +269,9 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
         } else if (id == R.id.bt_print) {
             DebugLog.d(TAG, "bt print");
             permissionHelper.requestPermissions();
-        } else if (id == R.id.bt_open_file_system) {
-            DebugLog.d(TAG, "bt open file system");
+        } else if (id == R.id.delete_last_record) {
+            DebugLog.d(TAG, "delete last record");
+            popDeleteDialog();
         }
     }
 

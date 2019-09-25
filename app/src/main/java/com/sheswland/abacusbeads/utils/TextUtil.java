@@ -45,6 +45,16 @@ public class TextUtil {
         return res;
     }
 
+    public static int[] getHMS(Date date) {
+        int[] res = new int[3];
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        res[0] = calendar.get(Calendar.HOUR);
+        res[1] = calendar.get(Calendar.MINUTE);
+        res[2] = calendar.get(Calendar.SECOND);
+        return res;
+    }
+
     public static String formatNumber2xx(int i) {
         return i > 9 ? String.valueOf(i) : "0" + i;
     }

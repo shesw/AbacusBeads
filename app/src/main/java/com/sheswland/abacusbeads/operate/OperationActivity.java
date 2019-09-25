@@ -15,17 +15,15 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.sheswland.abacusbeads.BaseActivity;
 import com.sheswland.abacusbeads.R;
 import com.sheswland.abacusbeads.database.DataBaseManager;
-import com.sheswland.abacusbeads.database.tables.AccountDayTable;
-import com.sheswland.abacusbeads.database.tables.AccountMonthAndYearTable;
 import com.sheswland.abacusbeads.database.tables.OperateDataTable;
 import com.sheswland.abacusbeads.utils.Const;
 import com.sheswland.abacusbeads.utils.DebugLog;
 import com.sheswland.abacusbeads.utils.JumperHelper;
 import com.sheswland.abacusbeads.utils.TextUtil;
 import com.sheswland.abacusbeads.utils.TipUtils;
-
-import org.litepal.LitePal;
 import java.util.Date;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 import static com.sheswland.abacusbeads.utils.TextUtil.getTime;
 
@@ -181,19 +179,37 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void commit() {
-        String content = inputContent.getText().toString();
-        String spend = inputSpend.getText().toString();
+        final String content = inputContent.getText().toString();
+        final String spend = inputSpend.getText().toString();
         DebugLog.d(TAG, "bt_commit " + content + " " + spend + " ");
         if (TextUtil.isEmpty(content)) {
             TipUtils.showMidToast(mActivity, "请输入内容");
         } else if (TextUtil.isEmpty(spend)) {
             TipUtils.showMidToast(mActivity, "请输入金额");
         } else {
-            operateDataTable.setContent(content);
-            operateDataTable.setSpend(TextUtil.formatFloat2(Float.parseFloat(spend)));
-            DataBaseManager.getInstance().saveTable(operateDataTable);
-            operateDataTable = (OperateDataTable) DataBaseManager.getInstance().deepCopyTable(operateDataTable);
-            TipUtils.showMidToast(mActivity, "commit success");
+            final SweetAlertDialog pDialog;
+            pDialog = new SweetAlertDialog(mActivity, SweetAlertDialog.PROGRESS_TYPE);
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+            pDialog.setTitleText("Loading");
+            pDialog.setCancelable(false);
+            pDialog.show();
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    operateDataTable.setContent(content);
+                    operateDataTable.setSpend(TextUtil.formatFloat2(Float.parseFloat(spend)));
+                    Date date = new Date();
+                    int[] time = TextUtil.getHMS(date);
+                    operateDataTable.setHour(time[0]);
+                    operateDataTable.setMinute(time[1]);
+                    operateDataTable.setSecond(time[2]);
+                    operateDataTable.setDate(date);
+                    DataBaseManager.getInstance().saveTable(operateDataTable);
+                    operateDataTable = (OperateDataTable) DataBaseManager.getInstance().deepCopyTable(operateDataTable);
+                    pDialog.dismissWithAnimation();
+                    TipUtils.showMidToast(mActivity, "commit success");
+                }
+            }, 1000);
         }
     }
 

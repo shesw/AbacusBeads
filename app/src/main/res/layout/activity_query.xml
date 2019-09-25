@@ -77,14 +77,16 @@
         app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
-        android:id="@+id/bt_open_file_system"
-        android:layout_width="80dp"
+        android:id="@+id/delete_last_record"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:layout_marginBottom="30dp"
         android:layout_marginRight="20dp"
-        android:text="open file system"
+        android:text="delete last record"
         android:textColor="#ffffff"
         android:gravity="center"
         android:background="@drawable/btn_background"

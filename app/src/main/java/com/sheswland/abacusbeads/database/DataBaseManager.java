@@ -151,6 +151,42 @@ public class DataBaseManager {
         return 1;
     }
 
+    public int deleteLastRecord() {
+        AccountDayTable dayTable = LitePal.findLast(AccountDayTable.class);
+        DebugLog.d(TAG, "here " + (dayTable == null));
+        if (dayTable == null) {
+            return -1;
+        }
+        DebugLog.d(TAG, dayTable.getTable_id());
+        LitePal.deleteAll(AccountDayTable.class, "table_id = ?", dayTable.getTable_id());
+
+        AccountMonthAndYearTable monthTable = LitePal.where("table_id = ? and year = ? and month = ?",
+                getTableId(TableType.ACCOUNT_MONTH_AND_YEAR, null, FilterAccuracy.all_month),
+                dayTable.getYear()+ "",
+                dayTable.getMonth() + "")
+                .find(AccountMonthAndYearTable.class).get(0);
+        AccountMonthAndYearTable yearTable = LitePal.where("table_id = ? and year = ?",
+                getTableId(TableType.ACCOUNT_MONTH_AND_YEAR, null, FilterAccuracy.all_year),
+                dayTable.getYear()+ "").
+                find(AccountMonthAndYearTable.class).get(0);
+        if (dayTable.isIncome()) {
+            monthTable.setIncome(monthTable.getIncome() - dayTable.getSpend());
+            monthTable.setRemain(monthTable.getRemain() - dayTable.getSpend());
+            yearTable.setIncome(yearTable.getIncome() - dayTable.getSpend());
+            yearTable.setRemain(yearTable.getRemain() - dayTable.getSpend());
+        } else {
+            monthTable.setSpend(monthTable.getSpend() - dayTable.getSpend());
+            monthTable.setRemain(monthTable.getRemain() + dayTable.getSpend());
+            yearTable.setSpend(yearTable.getSpend() - dayTable.getSpend());
+            yearTable.setRemain(yearTable.getRemain() + dayTable.getSpend());
+        }
+
+        monthTable.save();
+        yearTable.save();
+
+        return 1;
+    }
+
     public Table deepCopyTable(Table table) {
         if (table instanceof OperateDataTable) {
             OperateDataTable res = new OperateDataTable();
@@ -189,7 +225,7 @@ public class DataBaseManager {
     }
 
     private void saveAccountDayTable(OperateDataTable table) {
-        String tableId = getTableId(TableType.ACCOUNT_DAY, table.getDate(), FilterAccuracy.month);
+        String tableId = getTableId(TableType.ACCOUNT_DAY, table.getDate(), FilterAccuracy.second);
         AccountDayTable dayTable = new AccountDayTable();
         dayTable.setTable_id(tableId);
         dayTable.setContent(table.getContent());
