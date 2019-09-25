@@ -113,9 +113,9 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
         } else if (id == R.id.bt_reset) {
             DebugLog.d(TAG, "bt_reset");
             TipUtils.showMidToast(mActivity, "还没想好这个按钮用来干嘛");
-            LitePal.deleteAll(OperateDataTable.class);
-            LitePal.deleteAll(AccountDayTable.class);
-            LitePal.deleteAll(AccountMonthAndYearTable.class);
+//            LitePal.deleteAll(OperateDataTable.class);
+//            LitePal.deleteAll(AccountDayTable.class);
+//            LitePal.deleteAll(AccountMonthAndYearTable.class);
         }
     }
 
@@ -190,7 +190,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
             TipUtils.showMidToast(mActivity, "请输入金额");
         } else {
             operateDataTable.setContent(content);
-            operateDataTable.setSpend(Float.parseFloat(spend));
+            operateDataTable.setSpend(TextUtil.formatFloat2(Float.parseFloat(spend)));
             DataBaseManager.getInstance().saveTable(operateDataTable);
             operateDataTable = (OperateDataTable) DataBaseManager.getInstance().deepCopyTable(operateDataTable);
             TipUtils.showMidToast(mActivity, "commit success");

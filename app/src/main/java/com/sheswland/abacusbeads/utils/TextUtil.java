@@ -3,6 +3,7 @@ package com.sheswland.abacusbeads.utils;
 import com.sheswland.abacusbeads.database.database_interface.Table;
 import com.sheswland.abacusbeads.database.tables.OperateDataTable;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -46,5 +47,10 @@ public class TextUtil {
 
     public static String formatNumber2xx(int i) {
         return i > 9 ? String.valueOf(i) : "0" + i;
+    }
+
+    public static Float formatFloat2(float f) {
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        return Float.valueOf(decimalFormat.format(f));
     }
 }
