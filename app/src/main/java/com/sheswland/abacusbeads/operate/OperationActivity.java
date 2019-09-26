@@ -187,29 +187,13 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
         } else if (TextUtil.isEmpty(spend)) {
             TipUtils.showMidToast(mActivity, "请输入金额");
         } else {
-            final SweetAlertDialog pDialog;
-            pDialog = new SweetAlertDialog(mActivity, SweetAlertDialog.PROGRESS_TYPE);
-            pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-            pDialog.setTitleText("Loading");
-            pDialog.setCancelable(false);
-            pDialog.show();
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    operateDataTable.setContent(content);
-                    operateDataTable.setSpend(TextUtil.formatFloat2(Float.parseFloat(spend)));
-                    Date date = new Date();
-                    int[] time = TextUtil.getHMS(date);
-                    operateDataTable.setHour(time[0]);
-                    operateDataTable.setMinute(time[1]);
-                    operateDataTable.setSecond(time[2]);
-                    operateDataTable.setDate(date);
-                    DataBaseManager.getInstance().saveTable(operateDataTable);
-                    operateDataTable = (OperateDataTable) DataBaseManager.getInstance().deepCopyTable(operateDataTable);
-                    pDialog.dismissWithAnimation();
-                    TipUtils.showMidToast(mActivity, "commit success");
-                }
-            }, 1000);
+            operateDataTable.setContent(content);
+            operateDataTable.setSpend(TextUtil.formatFloat2(Float.parseFloat(spend)));
+            Date date = new Date();
+            operateDataTable.setDate(date);
+            DataBaseManager.getInstance().saveTable(operateDataTable);
+            operateDataTable = (OperateDataTable) DataBaseManager.getInstance().deepCopyTable(operateDataTable);
+            TipUtils.showMidToast(mActivity, "commit success");
         }
     }
 

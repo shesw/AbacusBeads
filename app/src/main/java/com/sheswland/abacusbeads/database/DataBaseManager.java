@@ -72,8 +72,9 @@ public class DataBaseManager {
 
     public String getTableId(TableType type, Date date, FilterAccuracy accuracy) {
         String pattern = "yyyyMM";
-
         switch (accuracy) {
+            case timestamp:
+                return OPERATE_TABLE_PREFIX + System.currentTimeMillis();
             case second:
                 pattern = "yyyyMMddHHmmss";
                 break;
@@ -152,6 +153,10 @@ public class DataBaseManager {
     }
 
     public int deleteLastRecord() {
+
+        OperateDataTable operateDataTable = LitePal.findLast(OperateDataTable.class);
+        operateDataTable.delete();
+        
         AccountDayTable dayTable = LitePal.findLast(AccountDayTable.class);
         DebugLog.d(TAG, "here " + (dayTable == null));
         if (dayTable == null) {
@@ -225,7 +230,7 @@ public class DataBaseManager {
     }
 
     private void saveAccountDayTable(OperateDataTable table) {
-        String tableId = getTableId(TableType.ACCOUNT_DAY, table.getDate(), FilterAccuracy.second);
+        String tableId = getTableId(TableType.ACCOUNT_DAY, table.getDate(), FilterAccuracy.timestamp);
         AccountDayTable dayTable = new AccountDayTable();
         dayTable.setTable_id(tableId);
         dayTable.setContent(table.getContent());
