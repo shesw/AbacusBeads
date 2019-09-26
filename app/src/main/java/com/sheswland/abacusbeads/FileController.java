@@ -29,10 +29,16 @@ public class FileController {
 
     public void printTable2SD(Const.TableType type, Const.FilterAccuracy accuracy, int[] time) {
         String filePath = Const.getPrintPath(Const.subFileName);
-        File fileDirectory = new File(filePath);
-        if (!fileDirectory.exists()) {
-            DebugLog.d(TAG, "mkdirs " + filePath + " " + String.valueOf(fileDirectory.mkdirs()));
+
+        String[] dbFiles = new String[]{Const.dayTableSubFile, Const.monthTableSubFile, Const.yearTableSubFile};
+
+        for (String dbFile : dbFiles) {
+            File fileDirectory = new File(filePath + dbFile + File.separator);
+            if (!fileDirectory.exists()) {
+                DebugLog.d(TAG, "mkdirs " + filePath + " " + String.valueOf(fileDirectory.mkdirs()));
+            }
         }
+
         if (type == TableType.ACCOUNT_DAY) {
             printDayTable(time, filePath);
         } else if (type == TableType.ACCOUNT_MONTH_AND_YEAR) {
@@ -50,7 +56,7 @@ public class FileController {
         if (time.length < 2) return;
         String fileName = "day_table_" + time[0] + "" + time[1] + ".txt";
 
-        File targetFile = new File(path + fileName);
+        File targetFile = new File(path + Const.dayTableSubFile + File.separator + fileName);
 
         DebugLog.d(TAG, "targetFile " + targetFile.getAbsolutePath() + " " + time[0] + " "  + time[1]);
         try {
@@ -84,7 +90,7 @@ public class FileController {
         if (time.length < 1) return;
         String fileName = "month_table_" + time[0] + ".txt";
 
-        File targetFile = new File(path + fileName);
+        File targetFile = new File(path + Const.monthTableSubFile + File.separator + fileName);
 
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(targetFile));
@@ -116,7 +122,7 @@ public class FileController {
 
         String fileName = "month_table_year_all.txt";
 
-        File targetFile = new File(path + fileName);
+        File targetFile = new File(path + Const.yearTableSubFile + File.separator + fileName);
 
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(targetFile));

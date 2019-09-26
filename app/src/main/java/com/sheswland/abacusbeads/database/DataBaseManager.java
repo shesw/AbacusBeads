@@ -156,7 +156,7 @@ public class DataBaseManager {
 
         OperateDataTable operateDataTable = LitePal.findLast(OperateDataTable.class);
         operateDataTable.delete();
-        
+
         AccountDayTable dayTable = LitePal.findLast(AccountDayTable.class);
         DebugLog.d(TAG, "here " + (dayTable == null));
         if (dayTable == null) {

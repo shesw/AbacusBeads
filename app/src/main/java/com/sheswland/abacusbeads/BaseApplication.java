@@ -13,5 +13,12 @@ public class BaseApplication extends Application {
         super.onCreate();
         LitePal.initialize(this);
         Fresco.initialize(this);
+        init();
+    }
+
+
+    private void init() {
+        // 安装周期第一次打开时导入历史数据
+
     }
 }

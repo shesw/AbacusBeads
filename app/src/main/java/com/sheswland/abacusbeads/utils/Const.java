@@ -8,7 +8,10 @@ public class Const {
 
     public static String DocumentPath;
     public static final String subFileName = "AbacusBeads";
-    public static final String divide = "\t\t";
+    public static final String dayTableSubFile = "day_table";
+    public static final String monthTableSubFile = "month_table";
+    public static final String yearTableSubFile = "year_table";
+    public static final String divide = "              ";
 
     static {
         DocumentPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath();
