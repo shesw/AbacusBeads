@@ -6,16 +6,13 @@ import java.io.File;
 
 public class Const {
 
+    /******************************* table const ********************/
     public static String DocumentPath;
     public static final String subFileName = "AbacusBeads";
     public static final String dayTableSubFile = "day_table";
     public static final String monthTableSubFile = "month_table";
     public static final String yearTableSubFile = "year_table";
     public static final String divide = "              ";
-
-    static {
-        DocumentPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath();
-    }
 
     public static final String[] dayTableIncomeType = new String[] {"类型", "支出", "收入"};
 
@@ -43,9 +40,21 @@ public class Const {
         second,
         timestamp
     }
+    /******************************* table const end ********************/
+
+    /************************* file const *****************************/
+    static {
+        DocumentPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath();
+    }
 
     public static String getPrintPath(String subFile) {
         return DocumentPath + File.separator + subFile + File.separator;
     }
+    /************************* file const end *****************************/
 
+    /**************************** pf const ****************************/
+    public static String PF_NANE = "AbacusBeads";
+    public static String PF_INIT_HISTORY_DATA = "pf_init_history_data";
+
+    /********************************pf const end ********************/
 }
