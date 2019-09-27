@@ -17,7 +17,7 @@ import static com.sheswland.abacusbeads.utils.Const.divide;
 
 public class FileController {
 
-    private final String TAG = "FileController";
+    private final static String TAG = "FileController";
 
     private static FileController _HOLDER;
     public static FileController getInstance() {
@@ -50,6 +50,18 @@ public class FileController {
         }
     }
 
+    public static File[] getSubFiles(String directory) {
+        File file = new File(directory);
+        if (file.exists() && file.isDirectory()) {
+            if (file.listFiles() != null && file.listFiles().length > 0) {
+                for (File file1 : file.listFiles()) {
+                    DebugLog.d(TAG, "file name: " + file1.getName());
+                }
+                return file.listFiles();
+            }
+        }
+        return null;
+    }
 
     /******************** private *****************/
     private void printDayTable(int[] time, String path) {
