@@ -14,6 +14,11 @@ public class Const {
     public static final String yearTableSubFile = "year_table";
     public static final String divide = "              ";
 
+    public static final String dayTablePrefix = "day_table_";
+    public static final String monthTablePrefix = "month_table_";
+    public static final String yearAllTableName = "month_table_year_all";
+
+
     public static final String[] dayTableIncomeType = new String[] {"类型", "支出", "收入"};
 
     // 专门为查询页的查询表转换而使用，其它部分请使用FilterAccuracy;

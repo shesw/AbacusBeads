@@ -67,7 +67,7 @@ public class FileController {
     /******************** private *****************/
     private void printDayTable(int[] time, String path) {
         if (time.length < 2) return;
-        String fileName = "day_table_" + TextUtil.formatNumber2xx(time[0]) + "" + TextUtil.formatNumber2xx(time[1]) + ".txt";
+        String fileName = Const.dayTablePrefix + TextUtil.formatNumber2xx(time[0]) + "" + TextUtil.formatNumber2xx(time[1]) + ".txt";
 
         File targetFile = new File(path + Const.dayTableSubFile + File.separator + fileName);
 
@@ -101,7 +101,7 @@ public class FileController {
 
     private void printMonthTable(int[] time, String path) {
         if (time.length < 1) return;
-        String fileName = "month_table_" + TextUtil.formatNumber2xx(time[0]) + ".txt";
+        String fileName = Const.monthTablePrefix + TextUtil.formatNumber2xx(time[0]) + ".txt";
 
         File targetFile = new File(path + Const.monthTableSubFile + File.separator + fileName);
 
@@ -133,7 +133,7 @@ public class FileController {
 
     private void printYearTable(String path) {
 
-        String fileName = "month_table_year_all.txt";
+        String fileName = Const.yearAllTableName + ".txt";
 
         File targetFile = new File(path + Const.yearTableSubFile + File.separator + fileName);
 
