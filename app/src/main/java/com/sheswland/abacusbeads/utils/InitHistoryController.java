@@ -13,15 +13,20 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class InitHistoryController {
     private final String TAG = "InitHistoryController";
 
+    private Set<String> datas;
+
     public void init(Context context) {
 
-        initOldVersionData();
-
+        datas = new HashSet<>();
         initNewVersionData();
+        initOldVersionData();
+        datas.clear();
     }
 
     private void initOldVersionData() {
@@ -45,6 +50,9 @@ public class InitHistoryController {
         int year = Integer.parseInt(timeString.substring(0, 4));
         int month = Integer.parseInt(timeString.substring(4, 6));
         int day = 0;
+        if (datas.contains(year + "" + month)) {
+            return;
+        }
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
             String line = reader.readLine();
@@ -87,6 +95,7 @@ public class InitHistoryController {
             FileController.getInstance().printTable2SD(Const.TableType.ACCOUNT_MONTH_AND_YEAR, Const.FilterAccuracy.all_month, ydm);
             FileController.getInstance().printTable2SD(Const.TableType.ACCOUNT_MONTH_AND_YEAR, Const.FilterAccuracy.all_year, ydm);
 
+            datas.add(year + "" + month);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -117,6 +126,9 @@ public class InitHistoryController {
         int year = Integer.parseInt(timeString.substring(0, 4));
         int month = Integer.parseInt(timeString.substring(4, 6));
         int day = 0;
+        if (datas.contains(year + "" + month)) {
+            return;
+        }
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
             String line = reader.readLine();
@@ -156,11 +168,12 @@ public class InitHistoryController {
                 lineNumber++;
             }
             reader.close();
+            datas.add(year + "" + month);
 
-            int[] ydm = new int[] {year, month, day};
-            FileController.getInstance().printTable2SD(Const.TableType.ACCOUNT_DAY, Const.FilterAccuracy.month, ydm);
-            FileController.getInstance().printTable2SD(Const.TableType.ACCOUNT_MONTH_AND_YEAR, Const.FilterAccuracy.all_month, ydm);
-            FileController.getInstance().printTable2SD(Const.TableType.ACCOUNT_MONTH_AND_YEAR, Const.FilterAccuracy.all_year, ydm);
+//            int[] ydm = new int[] {year, month, day};
+//            FileController.getInstance().printTable2SD(Const.TableType.ACCOUNT_DAY, Const.FilterAccuracy.month, ydm);
+//            FileController.getInstance().printTable2SD(Const.TableType.ACCOUNT_MONTH_AND_YEAR, Const.FilterAccuracy.all_month, ydm);
+//            FileController.getInstance().printTable2SD(Const.TableType.ACCOUNT_MONTH_AND_YEAR, Const.FilterAccuracy.all_year, ydm);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
