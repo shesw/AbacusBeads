@@ -50,7 +50,11 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
     private int mYear;
     private int mMonth;
     private int mDay;
-    private QueryAdapter.TitleBarListener adapterTitleListener;
+
+    private View includeDayTitle;
+    private View includeMYTitle;
+    private TextView tv_date;
+    private TextView tv_type;
 
     private PermissionHelper permissionHelper;
 //    private String[] mPermissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA};
@@ -72,6 +76,11 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
         btPrint = findViewById(R.id.bt_print);
         btDeleteLastRecord = findViewById(R.id.delete_last_record);
         queryList = findViewById(R.id.query_list);
+
+        tv_date = findViewById(R.id.bt_date);
+        tv_type = findViewById(R.id.bt_type);
+        includeDayTitle = findViewById(R.id.include_query_title_day);
+        includeMYTitle = findViewById(R.id.include_query_title_month_and_year);
     }
 
     private void initViews() {
@@ -79,18 +88,10 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
         btPrint.setOnClickListener(this);
         btDeleteLastRecord.setOnClickListener(this);
 
-        adapterTitleListener = new QueryAdapter.TitleBarListener() {
-            @Override
-            public void onDateClick() {
-                chooseDate();
-            }
+        tv_date.setOnClickListener(this);
+        tv_type.setOnClickListener(this);
 
-            @Override
-            public void onTypeClick() {
-                changeType();
-            }
-        };
-        queryAdapter = new QueryAdapter(mActivity, adapterTitleListener);
+        queryAdapter = new QueryAdapter(mActivity);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(mActivity);
         queryList.setLayoutManager(manager);
         queryList.setAdapter(queryAdapter);
@@ -181,24 +182,31 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
             } else {
                 QueryDataManager.getInstance().updateDayTableList(mYear, mMonth, currentType != 1);
             }
-            queryAdapter = new QueryAdapter(mActivity, adapterTitleListener);
+            queryAdapter = new QueryAdapter(mActivity);
             queryList.setAdapter(queryAdapter);
             queryAdapter.setAccuracy(Const.Accuracy.day.ordinal());
             currentType--;
             changeType();
+            includeDayTitle.setVisibility(View.VISIBLE);
+            includeMYTitle.setVisibility(View.GONE);
         } else if (queryAdapter.currentAccuracy == Const.Accuracy.month.ordinal()) {
             QueryDataManager.getInstance().updateMontTableList(mYear);
-            queryAdapter = new QueryAdapter(mActivity, adapterTitleListener);
+            queryAdapter = new QueryAdapter(mActivity);
             queryList.setAdapter(queryAdapter);
             queryAdapter.setAccuracy(Const.Accuracy.month.ordinal());
             queryAdapter.notifyDataSetChanged();
+            includeDayTitle.setVisibility(View.GONE);
+            includeMYTitle.setVisibility(View.VISIBLE);
         } else if (queryAdapter.currentAccuracy == Const.Accuracy.year.ordinal()) {
             QueryDataManager.getInstance().updateYearTableList();
-            queryAdapter = new QueryAdapter(mActivity, adapterTitleListener);
+            queryAdapter = new QueryAdapter(mActivity);
             queryList.setAdapter(queryAdapter);
             queryAdapter.setAccuracy(Const.Accuracy.year.ordinal());
             queryAdapter.notifyDataSetChanged();
+            includeDayTitle.setVisibility(View.GONE);
+            includeMYTitle.setVisibility(View.VISIBLE);
         }
+
     }
 
     private void changeType() {
@@ -273,6 +281,11 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
         } else if (id == R.id.delete_last_record) {
             DebugLog.d(TAG, "delete last record");
             popDeleteDialog();
+        } else if (id == tv_date.getId()) {
+            chooseDate();
+        } else if (id == tv_type.getId()) {
+            changeType();
+            tv_type.setText(dayTableIncomeType[((QueryActivity)mActivity).currentType]);
         }
     }
 

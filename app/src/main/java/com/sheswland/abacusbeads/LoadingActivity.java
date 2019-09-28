@@ -39,7 +39,7 @@ public class LoadingActivity extends AppCompatActivity  implements PermissionInt
                 public void run() {
                     jump2Operate();
                 }
-            }, 2000);
+            }, 1000);
         }
     }
 
