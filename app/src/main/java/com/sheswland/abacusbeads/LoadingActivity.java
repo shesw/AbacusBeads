@@ -24,6 +24,7 @@ public class LoadingActivity extends AppCompatActivity  implements PermissionInt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
+
         mActivity = this;
         init();
     }
@@ -39,7 +40,7 @@ public class LoadingActivity extends AppCompatActivity  implements PermissionInt
                 public void run() {
                     jump2Operate();
                 }
-            }, 1000);
+            }, 500);
         }
     }
 
