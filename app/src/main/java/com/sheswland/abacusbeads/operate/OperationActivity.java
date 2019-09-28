@@ -20,12 +20,9 @@ import com.sheswland.abacusbeads.utils.Const;
 import com.sheswland.abacusbeads.utils.DebugLog;
 import com.sheswland.abacusbeads.utils.JumperHelper;
 import com.sheswland.abacusbeads.utils.TextUtil;
+import com.sheswland.abacusbeads.utils.TimeUtil;
 import com.sheswland.abacusbeads.utils.TipUtils;
 import java.util.Date;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
-
-import static com.sheswland.abacusbeads.utils.TextUtil.getTime;
 
 public class OperationActivity extends BaseActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
@@ -81,7 +78,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
             date = new Date();
         }
         operateDataTable = new OperateDataTable();
-        inputDate.setText(getTime(date));
+        inputDate.setText(TimeUtil.getTime(date));
         operateDataTable = (OperateDataTable) DataBaseManager.getInstance().produceTable(Const.TableType.OPERATE_TAB, date, operateDataTable);
     }
 
@@ -140,7 +137,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
         TimePickerView pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
-                String dateString = getTime(date);
+                String dateString = TimeUtil.getTime(date);
                 DebugLog.d(TAG, "date" + dateString);
                 inputDate.setText(dateString);
                 operateDataTable = (OperateDataTable) DataBaseManager.getInstance().produceTable(Const.TableType.OPERATE_TAB, date, operateDataTable);

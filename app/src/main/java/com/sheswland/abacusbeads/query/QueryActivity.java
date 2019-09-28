@@ -21,6 +21,7 @@ import com.sheswland.abacusbeads.query.adapter.QueryAdapter;
 import com.sheswland.abacusbeads.utils.Const;
 import com.sheswland.abacusbeads.utils.DebugLog;
 import com.sheswland.abacusbeads.utils.TextUtil;
+import com.sheswland.abacusbeads.utils.TimeUtil;
 import com.sheswland.abacusbeads.utils.TipUtils;
 import com.sheswland.abacusbeads.utils.permission.PermissionHelper;
 import com.sheswland.abacusbeads.utils.permission.PermissionInterface;
@@ -97,7 +98,7 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
 
     private void initQueryData() {
         Date date = new Date();
-        int[] ymd = TextUtil.getYMD(date);
+        int[] ymd = TimeUtil.getYMD(date);
         currentDate = date;
         mYear = ymd[0];
         mMonth = ymd[1];
@@ -118,7 +119,7 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
             } else if (currentType < 0) {
                 currentType = dayTableIncomeType.length - 1;
             }
-            int[] time = TextUtil.getYMD(date);
+            int[] time = TimeUtil.getYMD(date);
             currentDate = date;
             mYear = time[0];
             mMonth = time[1];

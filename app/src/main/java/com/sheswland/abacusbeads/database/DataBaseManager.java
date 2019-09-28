@@ -6,6 +6,7 @@ import com.sheswland.abacusbeads.database.tables.AccountMonthAndYearTable;
 import com.sheswland.abacusbeads.database.tables.OperateDataTable;
 import com.sheswland.abacusbeads.utils.DebugLog;
 import com.sheswland.abacusbeads.utils.TextUtil;
+import com.sheswland.abacusbeads.utils.TimeUtil;
 
 import org.litepal.LitePal;
 
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static com.sheswland.abacusbeads.utils.Const.TableType;
 import static com.sheswland.abacusbeads.utils.Const.FilterAccuracy;
@@ -98,7 +100,7 @@ public class DataBaseManager {
             case all_year:
                 return OPERATE_TABLE_PREFIX + "all_year";
         }
-        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.getDefault());
         String dateString = format.format(date);
         DebugLog.d(TAG, "dateString " + dateString);
         switch (type) {
@@ -113,8 +115,17 @@ public class DataBaseManager {
     }
 
     public void saveTable(Table table) {
+        saveTable(table, true);
+    }
+
+    public void saveTable(Table table, boolean needReSaveOperateTabe) {
         if (table instanceof OperateDataTable) {
-            OperateDataTable table1 = saveOperateTable(table);
+            OperateDataTable table1 = (OperateDataTable) table;
+            if (needReSaveOperateTabe) {
+                table1= saveOperateTable(table);
+            } else {
+                table1.save();
+            }
             saveAccountDayTable(table1);
             saveAccountMonthTable(table1);
             saveAccountYearTable(table1);
@@ -234,7 +245,7 @@ public class DataBaseManager {
         AccountDayTable dayTable = new AccountDayTable();
         dayTable.setTable_id(tableId);
         dayTable.setContent(table.getContent());
-        dayTable.setDate(TextUtil.formatDate2yyyyMMdd(table));
+        dayTable.setDate(TimeUtil.formatDate2yyyyMMdd(table));
         dayTable.setSpend(table.getSpend());
         dayTable.setIncome(table.isIncome());
         dayTable.setRemain(table.getRemain());
@@ -248,7 +259,7 @@ public class DataBaseManager {
     private void saveAccountMonthTable(OperateDataTable table) {
         String tableId = getTableId(TableType.ACCOUNT_MONTH_AND_YEAR, table.getDate(), FilterAccuracy.all_month);
         DebugLog.d(TAG, "saveAccountMonthTable tableId " + tableId);
-        String date = TextUtil.formatDate2yyyyMM(table);
+        String date = TimeUtil.formatDate2yyyyMM(table);
 
         ArrayList<AccountMonthAndYearTable> list = (ArrayList<AccountMonthAndYearTable>) LitePal.where("table_id = ? and year = ? and month = ?", tableId, String.valueOf(table.getYear()), String.valueOf(table.getMonth())).find(AccountMonthAndYearTable.class);
         AccountMonthAndYearTable accountMonthAndYearTable;

@@ -5,6 +5,7 @@ import com.sheswland.abacusbeads.database.tables.AccountDayTable;
 import com.sheswland.abacusbeads.database.tables.AccountMonthAndYearTable;
 import com.sheswland.abacusbeads.utils.Const;
 import com.sheswland.abacusbeads.utils.DebugLog;
+import com.sheswland.abacusbeads.utils.TextUtil;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -66,7 +67,7 @@ public class FileController {
     /******************** private *****************/
     private void printDayTable(int[] time, String path) {
         if (time.length < 2) return;
-        String fileName = "day_table_" + time[0] + "" + time[1] + ".txt";
+        String fileName = "day_table_" + TextUtil.formatNumber2xx(time[0]) + "" + TextUtil.formatNumber2xx(time[1]) + ".txt";
 
         File targetFile = new File(path + Const.dayTableSubFile + File.separator + fileName);
 
@@ -100,7 +101,7 @@ public class FileController {
 
     private void printMonthTable(int[] time, String path) {
         if (time.length < 1) return;
-        String fileName = "month_table_" + time[0] + ".txt";
+        String fileName = "month_table_" + TextUtil.formatNumber2xx(time[0]) + ".txt";
 
         File targetFile = new File(path + Const.monthTableSubFile + File.separator + fileName);
 

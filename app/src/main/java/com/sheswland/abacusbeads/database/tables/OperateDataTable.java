@@ -1,12 +1,14 @@
 package com.sheswland.abacusbeads.database.tables;
 
 import com.sheswland.abacusbeads.database.database_interface.Table;
+import com.sheswland.abacusbeads.utils.DebugLog;
 
 import org.litepal.crud.LitePalSupport;
 
 import java.util.Date;
 
 public class OperateDataTable extends LitePalSupport implements Table {
+    private final String TAG = "OperateDataTable";
     private String table_id;
 
     private boolean isIncome;
@@ -20,6 +22,20 @@ public class OperateDataTable extends LitePalSupport implements Table {
     private float spend;
     private float remain;
     private Date date;
+
+    public void debugLogTable() {
+        DebugLog.d(TAG, "table_id " + table_id + "\n" +
+                "isIncome " + isIncome + "\n" +
+                "year " + year + "\n" +
+                "month " + month + "\n" +
+                "day " + day + "\n" +
+                "hour " + hour + "\n" +
+                "minute " + minute + "\n" +
+                "second " + second + "\n" +
+                "content " + content + "\n" +
+                "spend " + spend + "\n" +
+                "remain " + remain + "\n");
+    }
 
     public Date getDate() {
         return date;
