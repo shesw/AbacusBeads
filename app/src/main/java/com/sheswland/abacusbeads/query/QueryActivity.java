@@ -18,6 +18,7 @@ import com.sheswland.abacusbeads.FileController;
 import com.sheswland.abacusbeads.R;
 import com.sheswland.abacusbeads.database.DataBaseManager;
 import com.sheswland.abacusbeads.query.adapter.QueryAdapter;
+import com.sheswland.abacusbeads.service.ServiceManager;
 import com.sheswland.abacusbeads.utils.Const;
 import com.sheswland.abacusbeads.utils.DebugLog;
 import com.sheswland.abacusbeads.utils.TextUtil;
@@ -174,6 +175,7 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
                         QueryDataManager.getInstance().updateMontTableList(mYear);
                         QueryDataManager.getInstance().updateYearTableList();
                         queryAdapter.notifyDataSetChanged();
+                        ServiceManager.getInstance().startPrintService(mActivity, new int[]{mYear, mMonth, mDay});
                         sDialog.dismissWithAnimation();
                     }
                 })
@@ -239,7 +241,7 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
             queryAdapter.notifyDataSetChanged();
         } else if (currentType == 1) {
             QueryDataManager.getInstance().updateDayTableList(mYear, mMonth, false);
-            queryAdapter.notifyDataSetChanged();;
+            queryAdapter.notifyDataSetChanged();
         } else if (currentType == 2) {
             QueryDataManager.getInstance().updateDayTableList(mYear, mMonth, true);
             queryAdapter.notifyDataSetChanged();
@@ -356,6 +358,5 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
             }
         }
         PermissionUtil.PermissionDialog(this, "程序运行需要如下权限：\n" + sb.toString() + "请在应用权限管理进行设置！");
-
     }
 }

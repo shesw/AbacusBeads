@@ -16,6 +16,7 @@ import com.sheswland.abacusbeads.BaseActivity;
 import com.sheswland.abacusbeads.R;
 import com.sheswland.abacusbeads.database.DataBaseManager;
 import com.sheswland.abacusbeads.database.tables.OperateDataTable;
+import com.sheswland.abacusbeads.service.ServiceManager;
 import com.sheswland.abacusbeads.utils.Const;
 import com.sheswland.abacusbeads.utils.DebugLog;
 import com.sheswland.abacusbeads.utils.JumperHelper;
@@ -109,6 +110,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
         } else if (id == R.id.bt_reset) {
             DebugLog.d(TAG, "bt_reset");
             TipUtils.showMidToast(mActivity, "还没想好这个按钮用来干嘛");
+//            ServiceManager.getInstance().startPrintService(this);
 //            LitePal.deleteAll(OperateDataTable.class);
 //            LitePal.deleteAll(AccountDayTable.class);
 //            LitePal.deleteAll(AccountMonthAndYearTable.class);
@@ -191,6 +193,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
             operateDataTable.setDate(date);
             DataBaseManager.getInstance().saveTable(operateDataTable);
             operateDataTable = (OperateDataTable) DataBaseManager.getInstance().deepCopyTable(operateDataTable);
+            ServiceManager.getInstance().startPrintService(this, new int[]{operateDataTable.getYear(), operateDataTable.getMonth(), operateDataTable.getDay()});
             TipUtils.showMidToast(mActivity, "commit success");
         }
     }
