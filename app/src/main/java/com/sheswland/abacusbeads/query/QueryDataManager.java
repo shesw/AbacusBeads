@@ -24,6 +24,13 @@ public class QueryDataManager {
     private ArrayList<Table> mMonthTableList;
     private ArrayList<Table> mYearTableList;
 
+    // need show in password mode
+    private boolean psDaySpend = true;
+    private boolean psDayRemain = true;
+    private boolean psMYSpend = true;
+    private boolean psMYIncome = true;
+    private boolean psMYRemain = true;
+
 
     /*********************** private methods *********************/
     private QueryDataManager() {
@@ -90,5 +97,45 @@ public class QueryDataManager {
 
     public void setmYearTableList(ArrayList<Table> mYearTableList) {
         this.mYearTableList = mYearTableList;
+    }
+
+    public void changePsDaySpend() {
+        this.psDaySpend = !psDaySpend;
+    }
+
+    public void changePsDayRemain() {
+        this.psDayRemain = !psDayRemain;
+    }
+
+    public void changePsMYSpend() {
+        this.psMYSpend = !psMYSpend;
+    }
+
+    public void changePsMYIncome() {
+        this.psMYIncome = !psMYIncome;
+    }
+
+    public void changePsMYRemain() {
+        this.psMYRemain = !psMYRemain;
+    }
+
+    public boolean isPsDaySpend() {
+        return psDaySpend;
+    }
+
+    public boolean isPsDayRemain() {
+        return psDayRemain;
+    }
+
+    public boolean isPsMYSpend() {
+        return psMYSpend;
+    }
+
+    public boolean isPsMYIncome() {
+        return psMYIncome;
+    }
+
+    public boolean isPsMYRemain() {
+        return psMYRemain;
     }
 }

@@ -56,6 +56,12 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
     private TextView tv_date;
     private TextView tv_type;
 
+    private TextView tvDayTitleSpend;
+    private TextView tvDayTitleRemain;
+    private TextView tvMYTitleSpend;
+    private TextView tvMYTitleIncome;
+    private TextView tvMYTitleRemain;
+
     private PermissionHelper permissionHelper;
 //    private String[] mPermissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA};
     private String[] mPermissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -81,6 +87,12 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
         tv_type = findViewById(R.id.bt_type);
         includeDayTitle = findViewById(R.id.include_query_title_day);
         includeMYTitle = findViewById(R.id.include_query_title_month_and_year);
+
+        tvDayTitleSpend = findViewById(R.id.tv_day_title_spend);
+        tvDayTitleRemain = findViewById(R.id.tv_day_title_remain);
+        tvMYTitleSpend = findViewById(R.id.tv_my_title_spend);
+        tvMYTitleIncome = findViewById(R.id.tv_my_title_income);
+        tvMYTitleRemain = findViewById(R.id.tv_my_title_remain);
     }
 
     private void initViews() {
@@ -90,6 +102,12 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
 
         tv_date.setOnClickListener(this);
         tv_type.setOnClickListener(this);
+
+        tvDayTitleSpend.setOnClickListener(this);
+        tvDayTitleRemain.setOnClickListener(this);
+        tvMYTitleSpend.setOnClickListener(this);
+        tvMYTitleIncome.setOnClickListener(this);
+        tvMYTitleRemain.setOnClickListener(this);
 
         queryAdapter = new QueryAdapter(mActivity);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(mActivity);
@@ -286,6 +304,16 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener,
         } else if (id == tv_type.getId()) {
             changeType();
             tv_type.setText(dayTableIncomeType[((QueryActivity)mActivity).currentType]);
+        } else if (id == tvDayTitleSpend.getId()) {
+            queryAdapter.changePsDaySpend();
+        } else if (id == tvDayTitleRemain.getId()) {
+            queryAdapter.changePsDayRemain();
+        } else if (id == tvMYTitleSpend.getId()) {
+            queryAdapter.changePsMYSpend();
+        } else if (id == tvMYTitleIncome.getId()) {
+            queryAdapter.changePsMYIncome();
+        } else if (id == tvMYTitleRemain.getId()) {
+            queryAdapter.changePsMYRemain();
         }
     }
 

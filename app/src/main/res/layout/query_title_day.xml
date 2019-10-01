@@ -58,7 +58,7 @@
         <include layout="@layout/dividing_view" />
 
         <TextView
-            android:id="@+id/spend"
+            android:id="@+id/tv_day_title_spend"
             android:layout_width="65dp"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -69,7 +69,7 @@
         <include layout="@layout/dividing_view" />
 
         <TextView
-            android:id="@+id/remain"
+            android:id="@+id/tv_day_title_remain"
             android:layout_width="65dp"
             android:layout_height="match_parent"
             android:textColor="#ffffff"

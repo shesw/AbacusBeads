@@ -58,8 +58,8 @@ public class QueryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ((DayViewHolder)myViewHolder).date.setText(table.getDate());
             ((DayViewHolder)myViewHolder).content.setText(table.getContent());
             ((DayViewHolder)myViewHolder).type.setText(table.isIncome() ? "收入" : "支出");
-            ((DayViewHolder)myViewHolder).spend.setText(String.valueOf(TextUtil.formatFloat2(table.getSpend())));
-            ((DayViewHolder)myViewHolder).remain.setText(String.valueOf(TextUtil.formatFloat2(table.getRemain())));
+            ((DayViewHolder)myViewHolder).spend.setText(QueryDataManager.getInstance().isPsDaySpend() ? "***" : String.valueOf(TextUtil.formatFloat2(table.getSpend())));
+            ((DayViewHolder)myViewHolder).remain.setText(QueryDataManager.getInstance().isPsDayRemain() ? "***" : String.valueOf(TextUtil.formatFloat2(table.getRemain())));
         } else if (myViewHolder instanceof MonthAndYearViewHolder) {
             AccountMonthAndYearTable table;
             if (currentAccuracy == Accuracy.month.ordinal()) {
@@ -68,9 +68,9 @@ public class QueryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 table = (AccountMonthAndYearTable) QueryDataManager.getInstance().getmYearTableList().get(i);
             }
             ((MonthAndYearViewHolder)myViewHolder).date.setText(table.getDate());
-            ((MonthAndYearViewHolder)myViewHolder).income.setText(String.valueOf(TextUtil.formatFloat2(table.getIncome())));
-            ((MonthAndYearViewHolder)myViewHolder).spend.setText(String.valueOf(TextUtil.formatFloat2(table.getSpend())));
-            ((MonthAndYearViewHolder)myViewHolder).remain.setText(String.valueOf(TextUtil.formatFloat2(table.getRemain())));
+            ((MonthAndYearViewHolder)myViewHolder).income.setText(QueryDataManager.getInstance().isPsMYIncome() ? "***" : String.valueOf(TextUtil.formatFloat2(table.getIncome())));
+            ((MonthAndYearViewHolder)myViewHolder).spend.setText(QueryDataManager.getInstance().isPsMYSpend() ? "***" : String.valueOf(TextUtil.formatFloat2(table.getSpend())));
+            ((MonthAndYearViewHolder)myViewHolder).remain.setText(QueryDataManager.getInstance().isPsMYRemain() ? "***" : String.valueOf(TextUtil.formatFloat2(table.getRemain())));
         }
     }
 
@@ -122,5 +122,31 @@ public class QueryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             this.remain = itemView.findViewById(R.id.remain);
         }
     }
+
+    public void changePsDaySpend() {
+        QueryDataManager.getInstance().changePsDaySpend();
+        notifyDataSetChanged();
+    }
+
+    public void changePsDayRemain() {
+        QueryDataManager.getInstance().changePsDayRemain();
+        notifyDataSetChanged();
+    }
+
+    public void changePsMYSpend() {
+        QueryDataManager.getInstance().changePsMYSpend();
+        notifyDataSetChanged();
+    }
+
+    public void changePsMYIncome() {
+        QueryDataManager.getInstance().changePsMYIncome();
+        notifyDataSetChanged();
+    }
+
+    public void changePsMYRemain() {
+        QueryDataManager.getInstance().changePsMYRemain();
+        notifyDataSetChanged();
+    }
+
 
 }
