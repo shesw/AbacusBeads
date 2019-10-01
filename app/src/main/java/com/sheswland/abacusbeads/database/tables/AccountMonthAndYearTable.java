@@ -1,6 +1,7 @@
 package com.sheswland.abacusbeads.database.tables;
 
 import com.sheswland.abacusbeads.database.database_interface.Table;
+import com.sheswland.abacusbeads.utils.TextUtil;
 
 import org.litepal.crud.LitePalSupport;
 
@@ -61,7 +62,7 @@ public class AccountMonthAndYearTable extends LitePalSupport implements Table {
     }
 
     public void setSpend(float spend) {
-        this.spend = spend;
+        this.spend = TextUtil.formatFloat2(spend);
     }
 
     public float getIncome() {
@@ -69,7 +70,7 @@ public class AccountMonthAndYearTable extends LitePalSupport implements Table {
     }
 
     public void setIncome(float income) {
-        this.income = income;
+        this.income = TextUtil.formatFloat2(income);
     }
 
     public float getRemain() {
@@ -77,6 +78,6 @@ public class AccountMonthAndYearTable extends LitePalSupport implements Table {
     }
 
     public void setRemain(float remain) {
-        this.remain = remain;
+        this.remain = TextUtil.formatFloat2(remain);
     }
 }

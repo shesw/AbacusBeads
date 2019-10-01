@@ -1,14 +1,10 @@
 package com.sheswland.abacusbeads.utils;
 
-import com.sheswland.abacusbeads.database.database_interface.Table;
-import com.sheswland.abacusbeads.database.tables.OperateDataTable;
-
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 public class TextUtil {
+    private static DecimalFormat decimalFormat = new DecimalFormat("#.00");
+
     public static boolean isEmpty(String string) {
         return "".equals(string) || null == string;
     }
@@ -18,7 +14,6 @@ public class TextUtil {
     }
 
     public static Float formatFloat2(float f) {
-        DecimalFormat decimalFormat = new DecimalFormat("#.00");
         return Float.valueOf(decimalFormat.format(f));
     }
 
