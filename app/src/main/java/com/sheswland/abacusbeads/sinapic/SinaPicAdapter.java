@@ -26,7 +26,7 @@ public class SinaPicAdapter extends RecyclerView.Adapter<SinaPicAdapter.MyViewHo
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         String url = SinaUtils.getInstance().generateUrlByDefault(SinaPicDataController.getInstance().getPath(i));
         DebugLog.d(SinaPictureActivity.TAG, "url " + url);
-        myViewHolder.pic.setImageURI(Uri.parse(url));
+        myViewHolder.pic.setImageURI(Uri.decode(url));
     }
 
     @Override

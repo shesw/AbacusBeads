@@ -20,8 +20,11 @@ public class SinaPicDataController {
 
     private List<String> mList = new ArrayList<>();
     public void setList(ObjectListing list) {
+        setList(list, "");
+    }
+    public void setList(ObjectListing list, String filter) {
         for (S3ObjectSummary s3ObjectSummary : list.getObjectSummaries()) {
-            if (TextUtil.isImage(s3ObjectSummary.getKey())) {
+            if (TextUtil.isImage(s3ObjectSummary.getKey()) && s3ObjectSummary.getKey().contains(filter)) {
                 DebugLog.d(SinaPictureActivity.TAG, "key " + s3ObjectSummary.getKey());
                 mList.add(s3ObjectSummary.getKey());
             }

@@ -6,4 +6,6 @@ public class SinaConfig {
 
     public static String bucketName = "music-store";
     public static int expiration_min = 60;
+
+    public static String filter_1 = "prehello";
 }

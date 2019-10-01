@@ -66,7 +66,7 @@ public class SinaPictureActivity extends AppCompatActivity {
                     requestPics();
                     return;
                 }
-                SinaPicDataController.getInstance().setList(list);
+                SinaPicDataController.getInstance().setList(list, SinaConfig.filter_1);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
