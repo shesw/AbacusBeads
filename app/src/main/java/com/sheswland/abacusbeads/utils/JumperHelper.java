@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.sheswland.abacusbeads.operate.OperationActivity;
 import com.sheswland.abacusbeads.query.QueryActivity;
+import com.sheswland.abacusbeads.sinapic.SinaPictureActivity;
 
 public class JumperHelper {
     private static String TAG = "JumperHelper";
@@ -16,6 +17,11 @@ public class JumperHelper {
 
     public static void jump2Query(Activity activity) {
         Intent intent = new Intent(activity, QueryActivity.class);
+        activity.startActivity(intent);
+    }
+
+    public static void jump2SinaPicQuery(Activity activity) {
+        Intent intent = new Intent(activity, SinaPictureActivity.class);
         activity.startActivity(intent);
     }
 }

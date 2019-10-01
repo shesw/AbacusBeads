@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -40,6 +41,8 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
     private TextView btReset;
     private OperateDataTable operateDataTable;
 
+    private CardView logoCardview;
+
     private Handler mHandler;
 
     @Override
@@ -65,6 +68,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
         btCommit = findViewById(R.id.bt_commit);
         btQuery = findViewById(R.id.bt_query);
         btReset = findViewById(R.id.bt_reset);
+        logoCardview = findViewById(R.id.logo_cardview);
     }
 
     private void initViews() {
@@ -73,6 +77,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
         btCommit.setOnClickListener(this);
         btQuery.setOnClickListener(this);
         btReset.setOnClickListener(this);
+        logoCardview.setOnClickListener(this);
     }
 
     private void initDataTable(Date date) {
@@ -114,6 +119,8 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
 //            LitePal.deleteAll(OperateDataTable.class);
 //            LitePal.deleteAll(AccountDayTable.class);
 //            LitePal.deleteAll(AccountMonthAndYearTable.class);
+        } else if (id == logoCardview.getId()) {
+            JumperHelper.jump2SinaPicQuery(this);
         }
     }
 

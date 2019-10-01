@@ -4,6 +4,7 @@
     package="com.sheswland.abacusbeads">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
@@ -17,21 +18,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.StartingWindowTheme"
         tools:replace="android:icon">
-        <activity
-            android:name=".LoadingActivity">
+        <activity android:name=".sinapic.SinaPictureActivity"></activity>
+        <activity android:name=".LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".query.QueryActivity"/>
-        <activity
-            android:name=".operate.OperationActivity"/>
+        <activity android:name=".query.QueryActivity" />
+        <activity android:name=".operate.OperationActivity" />
+
         <service
             android:name=".service.PrintAccountService"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
     </application>
 
 </manifest>
