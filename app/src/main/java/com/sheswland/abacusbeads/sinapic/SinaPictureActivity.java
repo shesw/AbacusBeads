@@ -3,6 +3,7 @@ package com.sheswland.abacusbeads.sinapic;
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -22,14 +23,17 @@ import java.util.Date;
 
 public class SinaPictureActivity extends AppCompatActivity {
 
-    private final String TAG = "SinaPictureActivity";
+    public static final String TAG = "SinaPictureActivity";
 
-    private RecyclerView picList;
     private Activity mActivity;
+    private RecyclerView picList;
+    private SinaPicAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_sina_picture);
         mActivity = this;
         findViews();
@@ -42,8 +46,8 @@ public class SinaPictureActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        SinaPicAdapter adapter = new SinaPicAdapter();
-        LinearLayoutManager manager = new LinearLayoutManager(mActivity);
+        adapter = new SinaPicAdapter();
+        GridLayoutManager manager = new GridLayoutManager(mActivity, 3);
         picList.setLayoutManager(manager);
         picList.setAdapter(adapter);
     }
@@ -52,7 +56,7 @@ public class SinaPictureActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                ObjectListing list = SinaUtils.getInstance().listObjects("music-store");
+                ObjectListing list = SinaUtils.getInstance().listObjects(SinaConfig.bucketName);
                 if (list == null) {
                     try {
                         Thread.sleep(1000);
@@ -62,9 +66,14 @@ public class SinaPictureActivity extends AppCompatActivity {
                     requestPics();
                     return;
                 }
-                DebugLog.d(TAG, SinaUtils.getInstance().generateUrl("music-store", list.getObjectSummaries().get(300).getKey(), 10));
+                SinaPicDataController.getInstance().setList(list);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
             }
         }).start();
     }
-
 }

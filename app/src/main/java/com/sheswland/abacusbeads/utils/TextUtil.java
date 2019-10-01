@@ -24,4 +24,8 @@ public class TextUtil {
         return "";
     }
 
+    public static boolean isImage (String url) {
+        String extension = getExtensionWithDot(url);
+        return ".jpeg".equals(extension) || ".jpg".equals(extension) || ".png".equals(extension);
+    }
 }

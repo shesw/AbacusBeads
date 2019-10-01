@@ -1,5 +1,6 @@
 package com.sheswland.abacusbeads.sinapic;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +9,8 @@ import android.view.ViewGroup;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.sheswland.abacusbeads.R;
+import com.sheswland.abacusbeads.utils.DebugLog;
+import com.sheswland.abacusbeads.utils.SinaUtils;
 
 public class SinaPicAdapter extends RecyclerView.Adapter<SinaPicAdapter.MyViewHolder> {
 
@@ -21,12 +24,14 @@ public class SinaPicAdapter extends RecyclerView.Adapter<SinaPicAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
-
+        String url = SinaUtils.getInstance().generateUrlByDefault(SinaPicDataController.getInstance().getPath(i));
+        DebugLog.d(SinaPictureActivity.TAG, "url " + url);
+        myViewHolder.pic.setImageURI(Uri.parse(url));
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return SinaPicDataController.getInstance().getCount();
     }
 
 

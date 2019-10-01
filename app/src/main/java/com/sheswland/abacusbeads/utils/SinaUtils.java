@@ -35,6 +35,16 @@ public class SinaUtils {
         }).start();
     }
 
+    public String generateUrlByDefaultWithoutParams(String path){
+        String totalPath = generateUrlByDefault(path);
+        return totalPath.substring(0, totalPath.indexOf("?"));
+    }
+
+    //need run on sub thread
+    public String generateUrlByDefault(String path){
+        return generateUrl(SinaConfig.bucketName, path, SinaConfig.expiration_min);
+    }
+
     //need run on sub thread
     public String generateUrl(String bucketName, String path, int minutes){
         if (!isReady) return "";
@@ -45,11 +55,12 @@ public class SinaUtils {
         URL presignedUrl = conn.generatePresignedUrl(bucketName, path, expiration, false);
         return presignedUrl.toString();
     }
-
+    //need run on sub thread
     public ObjectListing listObjects(String bucketName) {
         return listObjects(bucketName, "");
     }
 
+    //need run on sub thread
     public ObjectListing listObjects(String bucketName, String nextMark){
         if (!isReady) return null;
         ObjectListing objectListing = TextUtil.isEmpty(nextMark) ? conn.listObjects(bucketName) : conn.listObjects(bucketName, nextMark);
