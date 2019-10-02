@@ -18,7 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.StartingWindowTheme"
         tools:replace="android:icon">
-        <activity android:name=".sinapic.SinaPictureActivity"></activity>
+        <activity android:name=".flsts.FlstsMainActivity"></activity>
+        <activity android:name=".sinapic.SinaPictureActivity" />
         <activity android:name=".LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

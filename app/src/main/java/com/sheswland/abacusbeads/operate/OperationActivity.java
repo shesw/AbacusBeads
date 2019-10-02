@@ -120,7 +120,7 @@ public class OperationActivity extends BaseActivity implements View.OnClickListe
 //            LitePal.deleteAll(AccountDayTable.class);
 //            LitePal.deleteAll(AccountMonthAndYearTable.class);
         } else if (id == logoCardview.getId()) {
-            JumperHelper.jump2SinaPicQuery(this);
+            JumperHelper.jump2Flsts(this);
         }
     }
 
