@@ -43,7 +43,7 @@
         app:layout_constraintTop_toBottomOf="@id/logo_cardview"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bt_print"
+        app:layout_constraintBottom_toTopOf="@id/delete_last_record"
         app:cardBackgroundColor="@color/card_background"
         app:cardCornerRadius="4dp"
         app:cardElevation="0dp">

@@ -19,7 +19,7 @@ public class FlstsMainActivity extends AppCompatActivity implements View.OnClick
     private void initViews() {
         findViewById(R.id.bt_potential_1).setOnClickListener(this);
     }
-    
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
