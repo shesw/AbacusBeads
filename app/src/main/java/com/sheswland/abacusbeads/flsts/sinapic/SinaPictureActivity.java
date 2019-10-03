@@ -1,6 +1,7 @@
 package com.sheswland.abacusbeads.flsts.sinapic;
 
 import android.app.Activity;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -18,7 +19,7 @@ public class SinaPictureActivity extends AppCompatActivity {
     private Activity mActivity;
     private RecyclerView picList;
     private SinaPicAdapter adapter;
-
+    private ViewPager previewViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +34,14 @@ public class SinaPictureActivity extends AppCompatActivity {
 
     private void findViews(){
         picList = findViewById(R.id.pic_list);
+        previewViewPager = findViewById(R.id.preview_viewpager);
     }
 
     private void initViews() {
-        adapter = new SinaPicAdapter();
+        PreviewViewPagerAdapter previewViewPagerAdapter = new PreviewViewPagerAdapter(this, previewViewPager);
+        previewViewPager.setAdapter(previewViewPagerAdapter);
+
+        adapter = new SinaPicAdapter(previewViewPager);
         GridLayoutManager manager = new GridLayoutManager(mActivity, 3);
         picList.setLayoutManager(manager);
         picList.setAdapter(adapter);
