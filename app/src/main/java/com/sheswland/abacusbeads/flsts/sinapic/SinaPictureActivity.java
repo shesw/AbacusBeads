@@ -20,6 +20,7 @@ public class SinaPictureActivity extends AppCompatActivity {
     private RecyclerView picList;
     private SinaPicAdapter adapter;
     private ViewPager previewViewPager;
+    private PreviewViewPagerAdapter previewViewPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +39,10 @@ public class SinaPictureActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        PreviewViewPagerAdapter previewViewPagerAdapter = new PreviewViewPagerAdapter(this, previewViewPager);
+        previewViewPagerAdapter = new PreviewViewPagerAdapter(this, previewViewPager, picList);
         previewViewPager.setAdapter(previewViewPagerAdapter);
 
-        adapter = new SinaPicAdapter(previewViewPager);
+        adapter = new SinaPicAdapter(previewViewPager, picList);
         GridLayoutManager manager = new GridLayoutManager(mActivity, 3);
         picList.setLayoutManager(manager);
         picList.setAdapter(adapter);
@@ -51,7 +52,7 @@ public class SinaPictureActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                ObjectListing list = SinaUtils.getInstance().listObjects(SinaConfig.bucketName);
+                final ObjectListing list = SinaUtils.getInstance().listObjects(SinaConfig.bucketName);
                 if (list == null) {
                     try {
                         Thread.sleep(1000);
@@ -61,11 +62,12 @@ public class SinaPictureActivity extends AppCompatActivity {
                     requestPics();
                     return;
                 }
-                SinaPicDataController.getInstance().setList(list, SinaConfig.filter_1);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        SinaPicDataController.getInstance().setList(list, SinaConfig.filter_1);
                         adapter.notifyDataSetChanged();
+                        previewViewPagerAdapter.notifyDataSetChanged();
                     }
                 });
             }

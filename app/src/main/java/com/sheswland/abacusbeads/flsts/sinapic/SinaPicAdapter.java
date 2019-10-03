@@ -16,9 +16,11 @@ import com.sheswland.abacusbeads.utils.SinaUtils;
 public class SinaPicAdapter extends RecyclerView.Adapter<SinaPicAdapter.MyViewHolder> implements View.OnClickListener {
 
     private ViewPager mPreViewViewPager;
+    private RecyclerView mRecyclerView;
 
-    public SinaPicAdapter(ViewPager previewViewPager) {
+    public SinaPicAdapter(ViewPager previewViewPager, RecyclerView recyclerView) {
         mPreViewViewPager = previewViewPager;
+        mRecyclerView = recyclerView;
     }
 
     @NonNull
@@ -31,7 +33,6 @@ public class SinaPicAdapter extends RecyclerView.Adapter<SinaPicAdapter.MyViewHo
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         String url = SinaUtils.getInstance().generateUrlByDefault(SinaPicDataController.getInstance().getPath(i));
-        DebugLog.d(SinaPictureActivity.TAG, "url " );
         myViewHolder.pic.setImageURI(Uri.decode(url));
         myViewHolder.pic.setTag(i);
         myViewHolder.pic.setOnClickListener(this);
@@ -54,7 +55,8 @@ public class SinaPicAdapter extends RecyclerView.Adapter<SinaPicAdapter.MyViewHo
     public void onClick(View v) {
         int index = (int) v.getTag();
         DebugLog.d(SinaPictureActivity.TAG, "onClick " + index);
-        mPreViewViewPager.setCurrentItem(index);
+        mPreViewViewPager.setCurrentItem(index, false);
         mPreViewViewPager.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.INVISIBLE);
     }
 }

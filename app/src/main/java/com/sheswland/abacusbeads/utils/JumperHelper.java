@@ -4,9 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.sheswland.abacusbeads.flsts.FlstsMainActivity;
+import com.sheswland.abacusbeads.flsts.sinapic.SinaPictureActivity;
 import com.sheswland.abacusbeads.operate.OperationActivity;
 import com.sheswland.abacusbeads.query.QueryActivity;
-import com.sheswland.abacusbeads.sinapic.SinaPictureActivity;
+
 
 public class JumperHelper {
     private static String TAG = "JumperHelper";

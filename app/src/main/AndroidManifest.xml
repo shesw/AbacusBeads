@@ -20,7 +20,7 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
         <activity android:name=".flsts.FlstsMainActivity"></activity>
-        <activity android:name=".sinapic.SinaPictureActivity" />
+        <activity android:name=".flsts.sinapic.SinaPictureActivity" />
         <activity android:name=".LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
