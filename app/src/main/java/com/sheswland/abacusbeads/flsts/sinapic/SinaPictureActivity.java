@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.sheswland.abacusbeads.R;
 import com.sheswland.abacusbeads.utils.SinaConfig;
@@ -72,5 +73,15 @@ public class SinaPictureActivity extends AppCompatActivity {
                 });
             }
         }).start();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (picList.getVisibility() != View.VISIBLE) {
+            previewViewPager.setVisibility(View.GONE);
+            picList.setVisibility(View.VISIBLE);
+            return;
+        }
+        finish();
     }
 }
