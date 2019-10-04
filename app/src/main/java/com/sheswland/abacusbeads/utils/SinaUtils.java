@@ -1,5 +1,7 @@
 package com.sheswland.abacusbeads.utils;
 
+import com.sheswland.abacusbeads.utils.work.WorkManager;
+import com.sheswland.abacusbeads.utils.work.utils.OneTimeWorkRequest;
 import com.sina.cloudstorage.auth.AWSCredentials;
 import com.sina.cloudstorage.auth.BasicAWSCredentials;
 import com.sina.cloudstorage.services.scs.SCS;
@@ -24,16 +26,18 @@ public class SinaUtils {
     private SCS conn;
     private volatile boolean isReady;
 
-    private SinaUtils(){
-        new Thread(new Runnable() {
+    public synchronized void init() {
+        WorkManager.getInstance().execute(new Runnable() {
             @Override
             public void run() {
                 credentials = new BasicAWSCredentials(SinaConfig.accessKey, SinaConfig.secretKey);
                 conn = new SCSClient(credentials);
                 isReady = true;
             }
-        }).start();
+        });
     }
+
+    public boolean isReady() {return isReady;}
 
     public String generateUrlByDefaultWithoutParams(String path){
         String totalPath = generateUrlByDefault(path);

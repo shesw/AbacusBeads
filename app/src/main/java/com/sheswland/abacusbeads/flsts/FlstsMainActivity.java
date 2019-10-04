@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.sheswland.abacusbeads.R;
 import com.sheswland.abacusbeads.utils.JumperHelper;
+import com.sheswland.abacusbeads.utils.SinaUtils;
 
 public class FlstsMainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -14,6 +15,7 @@ public class FlstsMainActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flsts_main);
         initViews();
+        SinaUtils.getInstance().init();
     }
 
     private void initViews() {
@@ -24,7 +26,9 @@ public class FlstsMainActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.bt_potential_1) {
-            JumperHelper.jump2SinaPicQuery(this);
+            if (SinaUtils.getInstance().isReady()) {
+                JumperHelper.jump2SinaPicQuery(this);
+            }
         }
     }
 }

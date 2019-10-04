@@ -11,6 +11,7 @@ import android.view.View;
 import com.sheswland.abacusbeads.R;
 import com.sheswland.abacusbeads.utils.SinaConfig;
 import com.sheswland.abacusbeads.utils.SinaUtils;
+import com.sheswland.abacusbeads.utils.work.WorkManager;
 import com.sina.cloudstorage.services.scs.model.ObjectListing;
 
 public class SinaPictureActivity extends AppCompatActivity {
@@ -50,29 +51,22 @@ public class SinaPictureActivity extends AppCompatActivity {
     }
 
     private void requestPics() {
-        new Thread(new Runnable() {
+        WorkManager.getInstance().execute(new Runnable() {
             @Override
             public void run() {
-                final ObjectListing list = SinaUtils.getInstance().listObjects(SinaConfig.bucketName);
-                if (list == null) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    requestPics();
-                    return;
+                if (SinaUtils.getInstance().isReady()) {
+                    final ObjectListing list = SinaUtils.getInstance().listObjects(SinaConfig.bucketName);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            SinaPicDataController.getInstance().setList(list, SinaConfig.filter_1);
+                            adapter.notifyDataSetChanged();
+                            previewViewPagerAdapter.notifyDataSetChanged();
+                        }
+                    });
                 }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        SinaPicDataController.getInstance().setList(list, SinaConfig.filter_1);
-                        adapter.notifyDataSetChanged();
-                        previewViewPagerAdapter.notifyDataSetChanged();
-                    }
-                });
             }
-        }).start();
+        });
     }
 
     @Override
