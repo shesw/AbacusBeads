@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.sheswland.abacusbeads.R;
 import com.sheswland.abacusbeads.utils.DebugLog;
@@ -36,6 +38,12 @@ public class SinaPicAdapter extends RecyclerView.Adapter<SinaPicAdapter.MyViewHo
         myViewHolder.pic.setImageURI(Uri.decode(url));
         myViewHolder.pic.setTag(i);
         myViewHolder.pic.setOnClickListener(this);
+        DraweeController controller = Fresco.newDraweeControllerBuilder()
+                .setUri(Uri.parse(url))
+                .setTapToRetryEnabled(true)
+                .setOldController(myViewHolder.pic.getController())
+                .build();
+        myViewHolder.pic.setController(controller);
     }
 
     @Override
