@@ -6,6 +6,7 @@ import com.sina.cloudstorage.auth.AWSCredentials;
 import com.sina.cloudstorage.auth.BasicAWSCredentials;
 import com.sina.cloudstorage.services.scs.SCS;
 import com.sina.cloudstorage.services.scs.SCSClient;
+import com.sina.cloudstorage.services.scs.model.ListObjectsRequest;
 import com.sina.cloudstorage.services.scs.model.ObjectListing;
 
 import java.net.URL;
@@ -72,5 +73,8 @@ public class SinaUtils {
         return objectListing;
     }
 
+    public ObjectListing listNextBatchOfObjects(ObjectListing objectListing) {
+        return conn.listNextBatchOfObjects(objectListing);
+    }
 
 }

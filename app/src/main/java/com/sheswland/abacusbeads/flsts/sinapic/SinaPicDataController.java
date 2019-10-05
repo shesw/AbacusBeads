@@ -19,12 +19,20 @@ public class SinaPicDataController {
     }
 
     private List<String> mList = new ArrayList<>();
-    public void setList(ObjectListing list) {
-        setList(list, "");
+    public void addList(ObjectListing list) {
+        addList(list, "");
     }
-    public void setList(ObjectListing list, String filter) {
+    public void addList(ObjectListing list, String... filters) {
         for (S3ObjectSummary s3ObjectSummary : list.getObjectSummaries()) {
-            if (TextUtil.isImage(s3ObjectSummary.getKey()) && s3ObjectSummary.getKey().contains(filter)) {
+
+            boolean inFilter = false;
+            if (filters.length > 0) {
+                for (String filter : filters) {
+                    inFilter |= s3ObjectSummary.getKey().contains(filter);
+                }
+            }
+
+            if (TextUtil.isImage(s3ObjectSummary.getKey()) && inFilter) {
                 mList.add(s3ObjectSummary.getKey());
             }
         }

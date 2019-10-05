@@ -8,4 +8,7 @@ public class SinaConfig {
     public static int expiration_min = 60;
 
     public static String filter_1 = "prehello";
+    public static String filter_2 = "pretoutiao";
+    public static String filter_3 = "preakanesouma";
+    public static String filter_4 = "prerujiang";
 }
