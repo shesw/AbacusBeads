@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.sheswland.abacusbeads.R;
+import com.sheswland.abacusbeads.ui.RecyclerviewOnScrollListener;
 import com.sheswland.abacusbeads.utils.DebugLog;
 import com.sheswland.abacusbeads.utils.SinaConfig;
 import com.sheswland.abacusbeads.utils.SinaUtils;
@@ -52,6 +53,13 @@ public class SinaPictureActivity extends AppCompatActivity {
         GridLayoutManager manager = new GridLayoutManager(mActivity, 3);
         picList.setLayoutManager(manager);
         picList.setAdapter(adapter);
+        picList.addOnScrollListener(new RecyclerviewOnScrollListener(){
+            @Override
+            public void onBottom() {
+                DebugLog.d(TAG, "onBottom ");
+                requestNextBatchOfPics();
+            }
+        });
     }
 
     private void requestPics() {
@@ -76,6 +84,9 @@ public class SinaPictureActivity extends AppCompatActivity {
     }
 
     private void requestNextBatchOfPics() {
+        if (TextUtil.isEmpty(mObjectListing.getNextMarker())) {
+            return;
+        }
         WorkManager.getInstance().execute(new Runnable() {
             @Override
             public void run() {
